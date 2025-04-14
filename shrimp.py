@@ -595,8 +595,13 @@ class CursesTextEditor:
             # If help mode is on, show help; otherwise, show log.
             if self.sidebar_help_mode:
                 help_list = [
+                    "",
+                    "help!",
+                    "",
+                    "if x it dont work",
                     "i: insert",
                     "o: cmd",
+                    "w: act on word",
                     "d: delete",
                     "y: copy",
                     "u: paste",
@@ -609,10 +614,10 @@ class CursesTextEditor:
                     "󰘍c: clearfile",
                     "󰘍wq: write+quit",
                     "󰘍q: quit",
-                    "󰘍fd: file delete",
+                    "󰘍fd: file delete x",
                     "󰘍fr: file rename",
                     "󰘍fn: file new",
-                    "󰘍f: search",
+                    "󰘍f: search x",
                     "󰘍tb: tab menu",
                     "󰘍x: next tab",
                     "󰘍z: prev tab"

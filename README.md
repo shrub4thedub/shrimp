@@ -19,14 +19,16 @@ we got user theming, and some commands i made up.
 
 ## Command Mode Basics
 Press **o** in normal mode to enter command mode
-- **`󰘍w`** — Save (write) the current file.
-- **`󰘍q`** — Quit the editor.
-- **`󰘍wq`** — Save, then quit.
-- **`󰘍th`** — Open the theme menu to switch color schemes.
-- **`󰘍tb`** — Open the buffer menu to switch buffers schemes.
+- **`->w`** — Save (write) the current file.
+- **`->q`** — Quit the editor.
+- **`->wq`** — Save, then quit.
+- **`->th`** — Open the theme menu to switch color schemes.
+- **`->tb`** — Open the buffer menu to switch buffers
+
+- **`->h`** — there are a few more commands - do this to see em all
 
 ## Theming
-shrimp supports user-created themes. simply drop `.py` theme files in `~/shrimp/config/themes/`, then use **`󰘍th`** to pick a color scheme on the fly. theres an example theme you can copy and tweak to your liking.
+shrimp supports user-created themes. simply drop `.py` theme files in `~/shrimp/config/themes/`, then use **`->th`** to pick a color scheme on the fly. theres an example theme you can copy and tweak to your liking.
 
 ## Installation
 i havent thought about how to do this yet im still learning give it time.....

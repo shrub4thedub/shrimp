@@ -1,0 +1,80 @@
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 0/4 '
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 1/4 '
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 2/4 '
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 3/4 '
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-15 22:36:25] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-15 22:36:25] dir: changed directory to /home/shrub/shrimp/config/themes
+[2025-04-15 22:36:25] o: command
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-15 22:36:26] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-15 22:36:26] t: file tree
+[2025-04-15 22:36:35] o: command
+[2025-04-15 22:36:45] fn: file created: gruvbox.py
+[2025-04-15 22:36:46] o: command
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 0/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 1/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 2/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 3/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 4/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 5/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-15 22:36:47] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-15 22:36:47] t: file tree
+[2025-04-15 22:36:51] i: insert
+[2025-04-15 22:37:00] o: command
+[2025-04-15 22:37:02] w: write (611 bytes)
+[2025-04-15 22:37:03] o: command
+[2025-04-15 22:37:08] fn: file created: bareminimum.py
+[2025-04-15 22:37:15] h: startline
+[2025-04-15 22:37:15] m: mark set
+[2025-04-15 22:37:15] m: jump to mark
+[2025-04-15 22:37:15] m: mark set
+[2025-04-15 22:37:15] i: insert
+[2025-04-15 22:37:17] o: command
+[2025-04-15 22:37:19] w: write (526 bytes)
+[2025-04-15 22:37:28] o: command
+[2025-04-15 22:37:29] Editor exited.
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 0/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 1/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 2/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 3/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 4/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 5/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 6/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-15 22:38:09] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-15 22:38:09] dir: changed directory to /home/shrub/shrimp/config/themes
+[2025-04-15 22:38:10] o: command
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 0/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 1/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 2/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 3/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 4/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 5/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 6/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-15 22:38:10] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-15 22:38:10] t: file tree
+[2025-04-15 22:38:13] file opened: /home/shrub/shrimp/config/themes/bareminimum.py
+[2025-04-15 22:38:19] o: command
+[2025-04-15 22:38:20] c: clear
+[2025-04-15 22:38:22] h: startline
+[2025-04-15 22:38:22] m: mark set
+[2025-04-15 22:38:22] m: jump to mark
+[2025-04-15 22:38:22] m: mark set
+[2025-04-15 22:38:22] i: insert
+[2025-04-15 22:38:34] m: jump to mark
+[2025-04-15 22:38:36] d: delete line
+[2025-04-15 22:38:38] h: startline
+[2025-04-15 22:38:38] m: mark set
+[2025-04-15 22:38:39] m: jump to mark
+[2025-04-15 22:38:39] m: mark set
+[2025-04-15 22:38:39] i: insert
+[2025-04-15 22:38:57] o: command
+[2025-04-15 22:39:00] Editor exited.

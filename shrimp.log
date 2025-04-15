@@ -1,0 +1,60 @@
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 0/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 1/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 2/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 3/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 4/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 5/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 6/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 7/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 8/8 '
+[2025-04-15 20:49:45] curses.error in addstr at (44,156): ' loading... 8/8 '
+[2025-04-15 20:49:45] dir: changed directory to /home/shrub/shrimp
+[2025-04-15 20:49:47] o: command
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 0/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 1/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 2/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 3/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 4/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 5/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 6/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 7/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 8/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 9/9 '
+[2025-04-15 20:49:48] curses.error in addstr at (44,156): ' loading... 9/9 '
+[2025-04-15 20:49:48] t: file tree
+[2025-04-15 20:49:52] file opened: /home/shrub/shrimp/shrimp.log
+[2025-04-15 20:50:03] o: command
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 0/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 1/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 2/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 3/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 4/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 5/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 6/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 7/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 8/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 9/9 '
+[2025-04-15 20:50:03] curses.error in addstr at (44,156): ' loading... 9/9 '
+[2025-04-15 20:50:03] t: file tree
+[2025-04-15 20:50:06] file opened: /home/shrub/shrimp/__main__.py
+[2025-04-15 20:50:11] o: command
+[2025-04-15 20:50:14] theme changed to shrimp
+[2025-04-15 20:50:16] o: command
+[2025-04-15 20:50:19] theme changed to catpuccin
+[2025-04-15 20:50:20] o: command
+[2025-04-15 20:50:23] theme changed to boring
+[2025-04-15 20:50:24] o: command
+[2025-04-15 20:50:26] theme changed to shrimp
+[2025-04-15 20:50:33] m: mark set
+[2025-04-15 20:50:36] m: jump to mark
+[2025-04-15 20:50:37] o: command
+[2025-04-15 20:50:44] tb: buffer menu
+[2025-04-15 20:50:48] o: command
+[2025-04-15 20:50:49] h: help on
+[2025-04-15 20:51:00] j: endline
+[2025-04-15 20:51:01] h: startline
+[2025-04-15 20:51:01] j: endline
+[2025-04-15 20:51:02] o: command
+[2025-04-15 20:51:03] h: help on
+[2025-04-15 20:54:26] o: command
+[2025-04-15 20:54:26] Editor exited.

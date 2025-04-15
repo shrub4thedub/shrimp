@@ -1,0 +1,17 @@
+~/shrimp/
+├── __init__.py
+├── __main__.py
+├── buffer.py
+├── commands.py
+├── filetree.py
+├── logger.py
+├── ui/
+│   ├── __init__.py
+│   ├── input.py
+│   └── screen.py
+├── config/
+│   ├── themes/
+│   │   └── theme.conf
+
+
+

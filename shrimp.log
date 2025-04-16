@@ -451,3 +451,17 @@
 [2025-04-16 12:53:20] o: command
 [2025-04-16 12:53:48] o: command
 [2025-04-16 12:53:48] Editor exited.
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 14:58:31] curses.error in addstr at (44,156): ' loading... 5/5 '[2025-04-16 15:00:49] Editor exited.
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 15:01:14] curses.error in addstr at (44,156): ' loading... 5/5 '[2025-04-16 15:02:07] Editor exited.

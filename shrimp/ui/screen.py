@@ -78,24 +78,21 @@ def apply_powerline_theme(context):
       - arrow3_4: from seg3 to seg4
     
     If extended color support is available, custom RGB colors are defined.
-    Otherwise, we fallback to standard curses colors.
+    Otherwise, we fallback to basic curses colors by mapping theme strings (if available).
     """
     theme_data = context.available_themes.get(context.current_theme)
     if not theme_data:
         return
 
-    # Choose the four background colors from the theme.
-    seg1_bg = theme_data["accent"]
-    seg2_bg = theme_data["highlight"]
-    seg3_bg = theme_data["sel"]
-    seg4_bg = theme_data["sidebar"]
-    # Use theme_data["fg"] as the common text color.
-    text_fg = theme_data["fg"]
-
     if context.extended_color_support:
         def to_curses(rgb):
             return int(rgb[0]/255*1000), int(rgb[1]/255*1000), int(rgb[2]/255*1000)
-        # Choose arbitrary free color indexes
+        seg1_bg = theme_data["accent"]
+        seg2_bg = theme_data["highlight"]
+        seg3_bg = theme_data["sel"]
+        seg4_bg = theme_data["sidebar"]
+        text_fg = theme_data["fg"]
+        # Use arbitrary free color indexes
         seg1_idx = 250
         seg2_idx = 251
         seg3_idx = 252
@@ -109,15 +106,13 @@ def apply_powerline_theme(context):
             curses.init_color(fg_idx,   *to_curses(text_fg))
         except curses.error:
             pass
-        # Define segment color pairs (IDs 100, 102, 104, 106)
         curses.init_pair(100, fg_idx, seg1_idx)
-        curses.init_pair(102, fg_idx, seg2_idx)
-        curses.init_pair(104, fg_idx, seg3_idx)
-        curses.init_pair(106, fg_idx, seg4_idx)
-        # Define arrow pairs:
         curses.init_pair(101, seg1_idx, seg2_idx)
+        curses.init_pair(102, fg_idx, seg2_idx)
         curses.init_pair(103, seg2_idx, seg3_idx)
+        curses.init_pair(104, fg_idx, seg3_idx)
         curses.init_pair(105, seg3_idx, seg4_idx)
+        curses.init_pair(106, fg_idx, seg4_idx)
         context.powerline_pairs = {
             "seg1": 100,
             "arrow1_2": 101,
@@ -128,13 +123,45 @@ def apply_powerline_theme(context):
             "seg4": 106
         }
     else:
-        curses.init_pair(100, curses.COLOR_WHITE, curses.COLOR_RED)      # seg1
-        curses.init_pair(101, curses.COLOR_RED, curses.COLOR_GREEN)        # arrow1->2
-        curses.init_pair(102, curses.COLOR_WHITE, curses.COLOR_GREEN)      # seg2
-        curses.init_pair(103, curses.COLOR_GREEN, curses.COLOR_YELLOW)     # arrow2->3
-        curses.init_pair(104, curses.COLOR_BLACK, curses.COLOR_YELLOW)     # seg3
-        curses.init_pair(105, curses.COLOR_YELLOW, curses.COLOR_BLUE)      # arrow3->4
-        curses.init_pair(106, curses.COLOR_WHITE, curses.COLOR_BLUE)       # seg4
+        # Fallback: use basic curses colors with theme data if provided.
+        def get_basic_color(color_value, default):
+            if isinstance(color_value, str):
+                mapping = {
+                    "black": curses.COLOR_BLACK,
+                    "red": curses.COLOR_RED,
+                    "green": curses.COLOR_GREEN,
+                    "yellow": curses.COLOR_YELLOW,
+                    "blue": curses.COLOR_BLUE,
+                    "magenta": curses.COLOR_MAGENTA,
+                    "cyan": curses.COLOR_CYAN,
+                    "white": curses.COLOR_WHITE
+                }
+                return mapping.get(color_value.lower(), default)
+            elif isinstance(color_value, int):
+                return color_value
+            else:
+                return default
+
+        if theme_data:
+            seg1_color = get_basic_color(theme_data.get("accent"), curses.COLOR_RED)
+            seg2_color = get_basic_color(theme_data.get("highlight"), curses.COLOR_GREEN)
+            seg3_color = get_basic_color(theme_data.get("sel"), curses.COLOR_YELLOW)
+            seg4_color = get_basic_color(theme_data.get("sidebar"), curses.COLOR_BLUE)
+            fg_color   = get_basic_color(theme_data.get("fg"), curses.COLOR_WHITE)
+        else:
+            seg1_color = curses.COLOR_RED
+            seg2_color = curses.COLOR_GREEN
+            seg3_color = curses.COLOR_YELLOW
+            seg4_color = curses.COLOR_BLUE
+            fg_color   = curses.COLOR_WHITE
+
+        curses.init_pair(100, fg_color, seg1_color)
+        curses.init_pair(101, seg1_color, seg2_color)
+        curses.init_pair(102, fg_color, seg2_color)
+        curses.init_pair(103, seg2_color, seg3_color)
+        curses.init_pair(104, fg_color, seg3_color)
+        curses.init_pair(105, seg3_color, seg4_color)
+        curses.init_pair(106, fg_color, seg4_color)
         context.powerline_pairs = {
             "seg1": 100,
             "arrow1_2": 101,
@@ -171,13 +198,19 @@ def draw_powerline_segment(stdscr, y, x, text, seg_pair, arrow_pair=None):
 def draw_status_bar(context):
     """
     Draw a Powerline-style status bar that spans the entire width of the screen.
-    Left segments show mode, filename, and (if available) Git branch.
-    The right side is reserved for the time, flush with the right edge.
+    Left segments display mode, filename, and (if available) the Git branch.
+    The remaining area is filled with the background color for the time segment,
+    and the time is drawn flush to the right.
+
+    Now, the theme is updated each time this function is called so that dynamic theme
+    changes are immediately reflected in the status bar.
     """
+    # Always update the powerline color pairs on each draw
+    apply_powerline_theme(context)
+    pairs = context.powerline_pairs
     status_y = context.height - 1
 
     if context.zen_mode:
-        # In zen mode, use simplified status bar.
         mode_seg = f" {context.mode.upper()} "
         x = 0
         try:
@@ -204,10 +237,6 @@ def draw_status_bar(context):
             pass
         return
 
-    if not hasattr(context, "powerline_pairs"):
-        apply_powerline_theme(context)
-    pairs = context.powerline_pairs
-
     x = 0
     # Draw Mode Segment
     mode_text = f" {context.mode_icons.get(context.mode, '')} {context.mode.upper()} "
@@ -215,7 +244,6 @@ def draw_status_bar(context):
                                text=mode_text,
                                seg_pair=pairs["seg1"],
                                arrow_pair=pairs["arrow1_2"])
-
     # Draw Filename Segment
     fname = context.get_current_filename() or "new file"
     dirty_mark = "*" if context.current_buffer.modified else ""
@@ -225,8 +253,7 @@ def draw_status_bar(context):
                                text=file_text,
                                seg_pair=pairs["seg2"],
                                arrow_pair=pairs["arrow2_3"])
-
-    # Optionally draw Git branch segment if available
+    # Optionally draw Git branch segment if available.
     branch = get_git_branch(context.get_current_filename())
     if branch:
         branch_text = f"  {branch} "
@@ -234,8 +261,7 @@ def draw_status_bar(context):
                                    text=branch_text,
                                    seg_pair=pairs["seg3"],
                                    arrow_pair=pairs["arrow3_4"])
-
-    # Prepare Time Segment to be right-aligned
+    # Prepare Time Segment to be right-aligned.
     time_text = f" {time.strftime('%H:%M:%S')} "
     time_text_len = len(time_text)
     if x < context.width - time_text_len:
@@ -250,7 +276,7 @@ def draw_status_bar(context):
         x = context.width - time_text_len
     else:
         x = context.width - time_text_len
-    # Draw Time Segment flush on the right
+    # Draw Time Segment flush right.
     try:
         context.stdscr.attron(curses.color_pair(pairs["seg4"]))
         context.stdscr.addstr(status_y, x, time_text)
@@ -802,7 +828,6 @@ def draw_search_preview(context, x_offset, visible_height):
             prefix_len = 7
             safe_line = lines[line_index][:max(0, context.width - x_offset - prefix_len)]
             text = f"{indicator}{line_number}{safe_line}"
-            # Use color pair 10 for current line, and pair 2 for normal lines.
             color = curses.color_pair(10) if is_current_line else curses.color_pair(2)
             text_display = text.ljust(context.width - x_offset)
             try:
@@ -817,7 +842,6 @@ def display(context):
     context.height, context.width = context.stdscr.getmaxyx()
     visible_height = context.height - 1
 
-    # Fill main text area background using theme color (color pair 2)
     if context.sidebar_visible and context.width >= 80:
         sidebar_width = 30
     elif context.sidebar_visible:
@@ -861,7 +885,6 @@ def display(context):
                     prefix_len = 0
                 safe_line = lines[line_index][:max(0, text_area_width - prefix_len)]
                 text = f"{indicator}{line_number}{safe_line}"
-                # Use color pair 10 for current line, pair 2 for normal background
                 color = curses.color_pair(10) if is_current_line else curses.color_pair(2)
                 text_display = text.ljust(text_area_width)
                 try:

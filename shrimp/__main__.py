@@ -111,7 +111,7 @@ class EditorContext:
         """
         import os
         import sys
-        from shrimp.config.themes import themes
+        from shrimp import themes
 
         # 1) Load built-in themes from themes.py
         builtin = themes.get_builtin_themes()

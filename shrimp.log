@@ -1,0 +1,16 @@
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 0/4 '
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 1/4 '
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 2/4 '
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 3/4 '
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 4/4 '
+[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 4/4 '
+[2025-04-16 11:06:28] n: new file
+[2025-04-16 11:06:29] o: command
+[2025-04-16 11:06:33] theme changed to gruvbox
+[2025-04-16 11:06:35] i: insert
+[2025-04-16 11:06:47] o: command
+[2025-04-16 11:06:54] fr: error renaming file: [Errno 2] No such file or directory: 'shrub' -> 'testingpurposes.txt'
+[2025-04-16 11:07:01] o: command
+[2025-04-16 11:07:04] fd: error deleting file: [Errno 2] No such file or directory: 'shrub'
+[2025-04-16 11:07:05] o: command
+[2025-04-16 11:07:06] Editor exited.

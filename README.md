@@ -1,7 +1,7 @@
 # shrimp
-do you love being different at the expensive of your own productivity?
+do you love being different at the expense of your own productivity?
 do you love using unfinished and poorly written software?
-do you struggle to use vim but still want to flex that use use a modal editor?
+do you struggle to use vim but still want to flex that you use a modal editor?
 will you try anything once?
 
 then shrimp is for you!

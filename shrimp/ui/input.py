@@ -9,6 +9,10 @@ import time
 from shrimp import commands, filetree
 
 def handle_normal_mode(context, key: int):
+
+    if context.plugin_manager.handle_key_event('normal', key, context):
+        return
+
     """Handle a key press in normal mode."""
     # ESC cancels partial input
     if key == 27:  # ESC
@@ -275,6 +279,34 @@ def handle_insert_mode(context, key: int):
     if key == 27:  # ESC
         context.mode = "normal"
         return
+    if key == curses.KEY_UP and context.current_buffer.cursor_line > 0:
+        context.current_buffer.cursor_line -= 1
+        context.current_buffer.cursor_col = min(
+            context.current_buffer.cursor_col,
+            len(context.current_buffer.lines[context.current_buffer.cursor_line])
+        )
+        return
+    if key == curses.KEY_DOWN and context.current_buffer.cursor_line < len(context.current_buffer.lines) - 1:
+        context.current_buffer.cursor_line += 1
+        context.current_buffer.cursor_col = min(
+            context.current_buffer.cursor_col,
+            len(context.current_buffer.lines[context.current_buffer.cursor_line])
+        )
+        return
+    if key == curses.KEY_LEFT and context.current_buffer.cursor_col > 0:
+        context.current_buffer.cursor_col -= 1
+        return
+    if key == curses.KEY_RIGHT and context.current_buffer.cursor_col < len(
+            context.current_buffer.lines[context.current_buffer.cursor_line]):
+        context.current_buffer.cursor_col += 1
+        return
+    if key == curses.KEY_HOME:
+        context.current_buffer.cursor_col = 0
+        return
+    if key == curses.KEY_END:
+        context.current_buffer.cursor_col = len(
+            context.current_buffer.lines[context.current_buffer.cursor_line])
+        return
 
     if key in (curses.KEY_ENTER, 10):
         # Split line
@@ -331,6 +363,10 @@ def handle_command_mode(context, key: int):
         context.command_buffer += chr(key)
 
 def handle_filetree_mode(context, key: int):
+
+    if context.plugin_manager.handle_key_event('filetree', key, context):
+        return
+
     """Handle a key press in filetree (sidebar or full-screen) mode."""
     if key == curses.KEY_UP:
         if context.filetree_selection_index > 0:

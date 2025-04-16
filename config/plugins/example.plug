@@ -1,0 +1,39 @@
+# =============================================================================
+# Example ShrimpScript plugins
+#   • note        : adds "# NOTE" to the current line            (normal mode, n)
+#   • treedelete  : deletes the highlighted file in file‑tree    (filetree mode, d)
+#   • hello       : shows a greeting in the sidebar log          (:hello)
+# =============================================================================
+
+def note
+    mode normal
+    bind n
+        line = context.current_buffer.lines[context.current_buffer.cursor_line]
+        context.current_buffer.lines[context.current_buffer.cursor_line] = line + "  # NOTE"
+        context.current_buffer.modified = True
+        context.log_command("note added.")
+
+def treedelete
+    mode filetree
+    bind d
+        import os
+        node, _ = context.flat_file_list[context.filetree_selection_index]
+        if node.is_dir:
+            context.log_command("treedelete: cannot delete directory.")
+        else:
+            try:
+                os.remove(node.path)
+                context.log_command(f"deleted {node.name}")
+                # refresh tree
+                from shrimp import filetree
+                parent = node.parent or context.file_tree_root
+                filetree.load_children(parent, context.show_hidden, context)
+                context.flat_file_list = filetree.flatten_tree(context.file_tree_root)
+            except Exception as exc:
+                context.log_command(f"treedelete failed: {exc}")
+
+def hello
+    mode command
+    bind hello
+        context.log_command("Hello from your plugin! 🦐")
+

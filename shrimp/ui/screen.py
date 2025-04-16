@@ -712,6 +712,62 @@ def show_theme_menu(context):
         elif key == 27:
             return
 
+def show_plugin_menu(context):
+    """
+    Plugin manager dialog: arrow keys move, <Enter> toggles, Esc quits.
+    """
+    pm = context.plugin_manager
+    if not pm.plugins:
+        context.status_message = "no plugins found."
+        return
+
+    selected = 0
+    h = len(pm.plugins) + 4
+    w = 60
+    sy = max(0, (context.height - h) // 2)
+    sx = max(0, (context.width  - w) // 2)
+
+    while True:
+        try:
+            for r in range(h):
+                context.stdscr.addstr(sy + r, sx, " " * w, curses.color_pair(3))
+        except curses.error:
+            pass
+
+        title = " Plugin Manager (Enter toggles) "
+        top = "┌" + "─" * (w - 2) + "┐"
+        bot = "└" + "─" * (w - 2) + "┘"
+        try:
+            context.stdscr.addstr(sy, sx, top, curses.color_pair(3) | curses.A_BOLD)
+            context.stdscr.addstr(sy, sx + (w - len(title)) // 2,
+                                  title, curses.color_pair(3) | curses.A_BOLD)
+            context.stdscr.addstr(sy + h - 1, sx, bot, curses.color_pair(3) | curses.A_BOLD)
+        except curses.error:
+            pass
+
+        for idx, pl in enumerate(pm.plugins):
+            row = sy + 1 + idx
+            state = "✔" if pl.enabled else "✖"
+            label = f"[{state}] {pl.name} ({pl.mode} {pl.bind})"
+            style = curses.color_pair(1) | curses.A_BOLD if idx == selected else curses.color_pair(3)
+            prefix = "> " if idx == selected else "  "
+            try:
+                context.stdscr.addstr(row, sx + 1,
+                                      (prefix + label).ljust(w - 2), style)
+            except curses.error:
+                pass
+
+        context.stdscr.refresh()
+        k = context.stdscr.getch()
+        if k == curses.KEY_UP:
+            selected = (selected - 1) % len(pm.plugins)
+        elif k == curses.KEY_DOWN:
+            selected = (selected + 1) % len(pm.plugins)
+        elif k in (curses.KEY_ENTER, 10):
+            pm.toggle_plugin(selected)
+        elif k == 27:
+            return
+
 def show_full_filetree(context):
     """
     Show a full-screen file tree browser and return once a file is selected.
@@ -825,7 +881,7 @@ def draw_search_preview(context, x_offset, visible_height):
             is_current_line = (line_index == context.current_buffer.cursor_line)
             indicator = "-> " if is_current_line else "   "
             line_number = f"{line_index+1:<3}"
-            prefix_len = 7
+            prefix_len = 6
             safe_line = lines[line_index][:max(0, context.width - x_offset - prefix_len)]
             text = f"{indicator}{line_number}{safe_line}"
             color = curses.color_pair(10) if is_current_line else curses.color_pair(2)
@@ -898,7 +954,7 @@ def display(context):
     cursor_y = context.current_buffer.cursor_line - context.current_buffer.scroll
     cursor_x = context.current_buffer.cursor_col
     if not context.zen_mode:
-        cursor_x += 7
+        cursor_x += 6
     cursor_x += x_offset
     try:
         curses.curs_set(2)

@@ -8,6 +8,7 @@ import sys
 import importlib.util
 
 from shrimp import buffer, filetree, logger, commands, ui
+from shrimp import plugins
 
 class EditorContext:
     """
@@ -67,6 +68,10 @@ class EditorContext:
         # Clipboards
         self.clipboard = ""
         self.word_clipboard = ""
+        
+        #Plugins
+        self.plugin_manager = plugins.get_plugin_manager()
+
 
         # Command-line buffer and status
         self.command_buffer = ""

@@ -15,6 +15,14 @@ def process_command(context, command: str):
         return
     cmd_lower = cmd.lower()
 
+    if context.plugin_manager.execute_command(cmd_lower, context):
+        return
+
+    if cmd_lower == "plug":
+        context.ui.show_plugin_menu(context)          # user toggles plugins
+        context.status_message = "plugin menu closed."
+        return
+
     # Single commands
     if cmd_lower == "tb":
         # Open buffer switch menu

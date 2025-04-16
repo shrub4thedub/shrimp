@@ -1,0 +1,103 @@
+# ──────────────────────────────────────────────────────────────────────────
+# vim.plug   –   Vim‑style key‑bindings for Shrimp
+# Save to ~/shrimp/config/plugins/vim.plug
+# Toggle ON/OFF in :plug   (state persists via plugins.conf)
+# ──────────────────────────────────────────────────────────────────────────
+
+# ─── Navigation ──────────────────────────────────────────────────────────
+def vim_left
+    mode normal
+    bind h
+        if context.current_buffer.cursor_col > 0:
+            context.current_buffer.cursor_col -= 1
+
+def vim_down
+    mode normal
+    bind j
+        if context.current_buffer.cursor_line < len(context.current_buffer.lines) - 1:
+            context.current_buffer.cursor_line += 1
+            context.current_buffer.cursor_col = min(
+                context.current_buffer.cursor_col,
+                len(context.current_buffer.lines[context.current_buffer.cursor_line])
+            )
+
+def vim_up
+    mode normal
+    bind k
+        if context.current_buffer.cursor_line > 0:
+            context.current_buffer.cursor_line -= 1
+            context.current_buffer.cursor_col = min(
+                context.current_buffer.cursor_col,
+                len(context.current_buffer.lines[context.current_buffer.cursor_line])
+            )
+
+def vim_right
+    mode normal
+    bind l
+        if context.current_buffer.cursor_col < len(
+                context.current_buffer.lines[context.current_buffer.cursor_line]):
+            context.current_buffer.cursor_col += 1
+
+def vim_line_start
+    mode normal
+    bind 0
+        context.current_buffer.cursor_col = 0
+
+def vim_line_end
+    mode normal
+    bind $
+        context.current_buffer.cursor_col = len(
+            context.current_buffer.lines[context.current_buffer.cursor_line])
+
+# ─── Insert / Append / Open Line ─────────────────────────────────────────
+def vim_insert
+    mode normal
+    bind i
+        context.mode = "insert"
+
+def vim_append
+    mode normal
+    bind a
+        if context.current_buffer.cursor_col < len(
+                context.current_buffer.lines[context.current_buffer.cursor_line]):
+            context.current_buffer.cursor_col += 1
+        context.mode = "insert"
+
+def vim_open_below
+    mode normal
+    bind o
+        context.current_buffer.insert_line_below()
+        context.mode = "insert"
+
+# ─── Delete / Yank / Paste ───────────────────────────────────────────────
+def vim_delete_line
+    mode normal
+    bind d
+        context.current_buffer.delete_line()
+
+def vim_yank_line
+    mode normal
+    bind y
+        context.clipboard = context.current_buffer.copy_line()
+        context.log_command("vim: line yanked")
+
+def vim_paste_below
+    mode normal
+    bind p
+        if context.clipboard:
+            context.current_buffer.paste_lines(context.clipboard)
+            context.log_command("vim: pasted")
+
+# ─── Enter Shrimp command mode with “:” (Vim style) ──────────────────────
+def vim_colon_cmd
+    mode normal
+    bind :
+        context.mode = "command"
+        context.command_buffer = ""
+        context.log_command("vim: ':' command mode")
+
+# ─── Sidebar cheat‑sheet ─────────────────────────────────────────────────
+def vim_help
+    mode command
+    bind vimhelp
+        context.log_command("Vim keys: h j k l | i a o | d y p | 0 $ | :")

@@ -96,3 +96,358 @@
 [2025-04-16 11:27:46] o: command
 [2025-04-16 11:27:49] wq: quit without filename
 [2025-04-16 11:27:49] Editor exited.
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:35:16] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:35:29] n: new file
+[2025-04-16 11:35:31] i: insert
+[2025-04-16 11:35:48] y: copy line
+[2025-04-16 11:35:48] u: paste line
+[2025-04-16 11:35:48] y: copy line
+[2025-04-16 11:35:48] u: paste line
+[2025-04-16 11:35:51] y: copy line
+[2025-04-16 11:35:51] u: paste line
+[2025-04-16 11:35:53] d: delete line
+[2025-04-16 11:36:00] wd: delete word
+[2025-04-16 11:36:02] wd: delete word
+[2025-04-16 11:36:06] wd: delete word
+[2025-04-16 11:36:09] o: command
+[2025-04-16 11:36:16] o: command
+[2025-04-16 11:36:20] o: command
+[2025-04-16 11:36:33] theme changed to boring
+[2025-04-16 11:36:35] o: command
+[2025-04-16 11:36:37] theme changed to bareminimum
+[2025-04-16 11:36:39] o: command
+[2025-04-16 11:36:42] theme changed to gruvbox
+[2025-04-16 11:36:44] i: insert
+[2025-04-16 11:36:47] d: delete line
+[2025-04-16 11:36:48] o: command
+[2025-04-16 11:36:50] theme changed to shrimp
+[2025-04-16 11:36:51] o: command
+[2025-04-16 11:41:44] Editor exited.
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 0/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 1/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 2/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 3/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 4/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 5/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-16 11:43:29] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-16 11:43:34] file opened: /home/shrub/shrimp/shrub.txt
+[2025-04-16 11:43:38] o: command
+[2025-04-16 11:43:40] zen: on
+[2025-04-16 11:43:41] i: insert
+[2025-04-16 11:43:53] o: command
+[2025-04-16 11:43:54] zen: off
+[2025-04-16 11:44:52] m: mark set
+[2025-04-16 11:44:54] m: jump to mark
+[2025-04-16 11:44:55] o: command
+[2025-04-16 11:44:56] fd: file deleted /home/shrub/shrimp/shrub.txt
+[2025-04-16 11:44:57] o: command
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:44:59] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:44:59] t: file tree
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:45:00] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:45:07] curses.error in addstr at (44,156): ' loading... 0/0 '
+[2025-04-16 11:45:07] curses.error in addstr at (44,156): ' loading... 0/0 '
+[2025-04-16 11:45:17] file opened: /home/shrub/shrimp/shrimp/__main__.py
+[2025-04-16 11:45:24] m: mark set
+[2025-04-16 11:45:30] m: jump to mark
+[2025-04-16 11:46:45] o: command
+[2025-04-16 11:46:49] o: command
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:46:50] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:46:50] t: file tree
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:46:52] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 0/4 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 1/4 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 2/4 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 3/4 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-16 11:46:56] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-16 11:46:57] file opened: /home/shrub/shrimp/shrimp/ui/screen.py
+[2025-04-16 11:46:58] o: command
+[2025-04-16 11:46:59] c: clear
+[2025-04-16 11:47:00] m: mark set
+[2025-04-16 11:47:00] i: insert
+[2025-04-16 11:48:22] o: command
+[2025-04-16 11:48:23] w: write (34291 bytes)
+[2025-04-16 11:48:24] o: command
+[2025-04-16 11:48:28] Editor exited.
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:48:29] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:48:36] o: command
+[2025-04-16 11:48:38] wq: quit without filename
+[2025-04-16 11:48:38] Editor exited.
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:49:26] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:49:29] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:49:30] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 11:49:35] o: command
+[2025-04-16 11:49:38] theme changed to nord
+[2025-04-16 11:49:39] o: command
+[2025-04-16 11:49:41] theme changed to bareminimum
+[2025-04-16 11:49:42] o: command
+[2025-04-16 11:49:44] theme changed to boring
+[2025-04-16 11:55:33] o: command
+[2025-04-16 11:55:33] Editor exited.
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:55:52] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:55:55] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 11:55:59] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:00:52] o: command
+[2025-04-16 12:00:52] Editor exited.
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:01:10] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:01:13] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:01:17] curses.error in addstr at (44,156): ' loading... 0/2 '
+[2025-04-16 12:01:17] curses.error in addstr at (44,156): ' loading... 1/2 '
+[2025-04-16 12:01:17] curses.error in addstr at (44,156): ' loading... 2/2 '
+[2025-04-16 12:01:17] curses.error in addstr at (44,156): ' loading... 2/2 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 0/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 1/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 2/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 3/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 4/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 5/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 6/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-16 12:01:19] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-16 12:01:26] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:10:37] o: command
+[2025-04-16 12:10:38] Editor exited.
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:11:31] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:11:35] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:11:36] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:11:40] o: command
+[2025-04-16 12:11:40] Editor exited.
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:11:58] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:12:01] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:12:02] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:15:53] o: command
+[2025-04-16 12:15:55] theme changed to catpuccin
+[2025-04-16 12:15:56] o: command
+[2025-04-16 12:15:59] theme changed to bareminimum
+[2025-04-16 12:16:00] o: command
+[2025-04-16 12:16:02] theme changed to shrimp
+[2025-04-16 12:16:03] o: command
+[2025-04-16 12:16:04] Editor exited.
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:16:21] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:20:23] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:20:27] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:20:28] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:21:01] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:21:08] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:21:10] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-16 12:21:11] file opened: /home/shrub/shrimp/shrimp/themes.py
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:44:17] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-16 12:44:21] n: new file
+[2025-04-16 12:44:27] o: command
+[2025-04-16 12:44:33] theme changed to boring
+[2025-04-16 12:52:38] o: command
+[2025-04-16 12:52:41] Editor exited.
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 0/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 1/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 2/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 3/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 4/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 5/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-16 12:52:56] curses.error in addstr at (44,156): ' loading... 6/6 '
+[2025-04-16 12:53:02] n: new file
+[2025-04-16 12:53:20] o: command
+[2025-04-16 12:53:48] o: command
+[2025-04-16 12:53:48] Editor exited.

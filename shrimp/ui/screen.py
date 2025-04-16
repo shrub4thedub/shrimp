@@ -1,12 +1,15 @@
 """
 shrimp/ui/screen.py
 
-Implements all UI–drawing functionality for the Shrimp text editor.
-Based on the original shrimp.py code, re-implemented for the new modular structure.
+Implements all UI–drawing functionality for the Shrimp text editor,
+while respecting the user-selected theme for a multi-colored Powerline status bar,
+and including the original sidebar, file tree, and dialog methods.
 """
+
 import os
 import curses
 import time
+import subprocess
 from shrimp import logger, filetree
 
 # Icons and symbols
@@ -25,6 +28,8 @@ FILE_ICONS = {
     ".lua": "",
 }
 DEFAULT_FILE_ICON = ""
+
+# Command/menu icons and symbols
 CMD_ARROW = "󰘍"
 MENU_NEW_FILE  = ""
 MENU_FILE_TREE = ""
@@ -32,8 +37,264 @@ MENU_DIRECTORY = ""
 MENU_FIND_FILE = ""
 MENU_QUIT      = ""
 
+# Powerline arrow symbol (classic shape)
+POWERLINE_ARROW = ""
+
+###############################################################################
+# POWERLINE & THEME FUNCTIONS (New Features)
+###############################################################################
+
+def get_git_branch(filename: str) -> str or None:
+    """
+    Returns the current Git branch for the directory containing `filename`,
+    or None if not in a Git repo or if filename is empty.
+    """
+    if not filename:
+        return None
+    directory = os.path.dirname(os.path.abspath(filename))
+    try:
+        branch_bytes = subprocess.check_output(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=directory,
+            stderr=subprocess.STDOUT
+        )
+        return branch_bytes.decode("utf-8").strip()
+    except Exception:
+        return None
+
+def apply_powerline_theme(context):
+    """
+    Sets up dynamic curses color pairs for the Powerline status bar using user theme data.
+    
+    Uses four theme colors (from the user's current theme):
+      - seg1: For the mode segment (from theme_data["accent"])
+      - seg2: For the filename segment (from theme_data["highlight"])
+      - seg3: For the Git branch segment (from theme_data["sel"])
+      - seg4: For the time segment (from theme_data["sidebar"])
+    
+    Also sets up arrow transition pairs:
+      - arrow1_2: from seg1 to seg2
+      - arrow2_3: from seg2 to seg3
+      - arrow3_4: from seg3 to seg4
+    
+    If extended color support is available, custom RGB colors are defined.
+    Otherwise, we fallback to standard curses colors.
+    """
+    theme_data = context.available_themes.get(context.current_theme)
+    if not theme_data:
+        return
+
+    # Choose the four background colors from the theme.
+    seg1_bg = theme_data["accent"]
+    seg2_bg = theme_data["highlight"]
+    seg3_bg = theme_data["sel"]
+    seg4_bg = theme_data["sidebar"]
+    # Use theme_data["fg"] as the common text color.
+    text_fg = theme_data["fg"]
+
+    if context.extended_color_support:
+        def to_curses(rgb):
+            return int(rgb[0]/255*1000), int(rgb[1]/255*1000), int(rgb[2]/255*1000)
+        # Choose arbitrary free color indexes
+        seg1_idx = 250
+        seg2_idx = 251
+        seg3_idx = 252
+        seg4_idx = 253
+        fg_idx   = 254
+        try:
+            curses.init_color(seg1_idx, *to_curses(seg1_bg))
+            curses.init_color(seg2_idx, *to_curses(seg2_bg))
+            curses.init_color(seg3_idx, *to_curses(seg3_bg))
+            curses.init_color(seg4_idx, *to_curses(seg4_bg))
+            curses.init_color(fg_idx,   *to_curses(text_fg))
+        except curses.error:
+            pass
+        # Define segment color pairs (IDs 100, 102, 104, 106)
+        curses.init_pair(100, fg_idx, seg1_idx)
+        curses.init_pair(102, fg_idx, seg2_idx)
+        curses.init_pair(104, fg_idx, seg3_idx)
+        curses.init_pair(106, fg_idx, seg4_idx)
+        # Define arrow pairs:
+        curses.init_pair(101, seg1_idx, seg2_idx)
+        curses.init_pair(103, seg2_idx, seg3_idx)
+        curses.init_pair(105, seg3_idx, seg4_idx)
+        context.powerline_pairs = {
+            "seg1": 100,
+            "arrow1_2": 101,
+            "seg2": 102,
+            "arrow2_3": 103,
+            "seg3": 104,
+            "arrow3_4": 105,
+            "seg4": 106
+        }
+    else:
+        curses.init_pair(100, curses.COLOR_WHITE, curses.COLOR_RED)      # seg1
+        curses.init_pair(101, curses.COLOR_RED, curses.COLOR_GREEN)        # arrow1->2
+        curses.init_pair(102, curses.COLOR_WHITE, curses.COLOR_GREEN)      # seg2
+        curses.init_pair(103, curses.COLOR_GREEN, curses.COLOR_YELLOW)     # arrow2->3
+        curses.init_pair(104, curses.COLOR_BLACK, curses.COLOR_YELLOW)     # seg3
+        curses.init_pair(105, curses.COLOR_YELLOW, curses.COLOR_BLUE)      # arrow3->4
+        curses.init_pair(106, curses.COLOR_WHITE, curses.COLOR_BLUE)       # seg4
+        context.powerline_pairs = {
+            "seg1": 100,
+            "arrow1_2": 101,
+            "seg2": 102,
+            "arrow2_3": 103,
+            "seg3": 104,
+            "arrow3_4": 105,
+            "seg4": 106
+        }
+
+def draw_powerline_segment(stdscr, y, x, text, seg_pair, arrow_pair=None):
+    """
+    Draw a segment with text using color pair seg_pair; if arrow_pair is provided,
+    draw the Powerline arrow afterward.
+    Returns the new x position.
+    """
+    try:
+        stdscr.attron(curses.color_pair(seg_pair))
+        stdscr.addstr(y, x, text)
+        stdscr.attroff(curses.color_pair(seg_pair))
+    except curses.error:
+        pass
+    x += len(text)
+    if arrow_pair is not None:
+        try:
+            stdscr.attron(curses.color_pair(arrow_pair))
+            stdscr.addstr(y, x, POWERLINE_ARROW)
+            stdscr.attroff(curses.color_pair(arrow_pair))
+        except curses.error:
+            pass
+        x += len(POWERLINE_ARROW)
+    return x
+
+def draw_status_bar(context):
+    """
+    Draw a Powerline-style status bar that spans the entire width of the screen.
+    Left segments show mode, filename, and (if available) Git branch.
+    The right side is reserved for the time, flush with the right edge.
+    """
+    status_y = context.height - 1
+
+    if context.zen_mode:
+        # In zen mode, use simplified status bar.
+        mode_seg = f" {context.mode.upper()} "
+        x = 0
+        try:
+            context.stdscr.addstr(status_y, x, mode_seg, curses.color_pair(5))
+        except curses.error:
+            pass
+        x += len(mode_seg)
+        arrow = ""
+        try:
+            context.stdscr.addstr(status_y, x, arrow, curses.color_pair(3))
+        except curses.error:
+            pass
+        x += len(arrow)
+        time_seg = f" {time.strftime('%H:%M:%S')} "
+        time_seg_len = len(time_seg)
+        for pos in range(x, context.width - time_seg_len):
+            try:
+                context.stdscr.addch(status_y, pos, ' ', curses.color_pair(3))
+            except curses.error:
+                pass
+        try:
+            context.stdscr.addstr(status_y, context.width - time_seg_len, time_seg, curses.color_pair(3))
+        except curses.error:
+            pass
+        return
+
+    if not hasattr(context, "powerline_pairs"):
+        apply_powerline_theme(context)
+    pairs = context.powerline_pairs
+
+    x = 0
+    # Draw Mode Segment
+    mode_text = f" {context.mode_icons.get(context.mode, '')} {context.mode.upper()} "
+    x = draw_powerline_segment(context.stdscr, status_y, x,
+                               text=mode_text,
+                               seg_pair=pairs["seg1"],
+                               arrow_pair=pairs["arrow1_2"])
+
+    # Draw Filename Segment
+    fname = context.get_current_filename() or "new file"
+    dirty_mark = "*" if context.current_buffer.modified else ""
+    buf_info = f" [{context.current_buffer_index+1}/{len(context.buffers)}]" if len(context.buffers) > 1 else ""
+    file_text = f" {os.path.basename(fname)}{dirty_mark}{buf_info} "
+    x = draw_powerline_segment(context.stdscr, status_y, x,
+                               text=file_text,
+                               seg_pair=pairs["seg2"],
+                               arrow_pair=pairs["arrow2_3"])
+
+    # Optionally draw Git branch segment if available
+    branch = get_git_branch(context.get_current_filename())
+    if branch:
+        branch_text = f"  {branch} "
+        x = draw_powerline_segment(context.stdscr, status_y, x,
+                                   text=branch_text,
+                                   seg_pair=pairs["seg3"],
+                                   arrow_pair=pairs["arrow3_4"])
+
+    # Prepare Time Segment to be right-aligned
+    time_text = f" {time.strftime('%H:%M:%S')} "
+    time_text_len = len(time_text)
+    if x < context.width - time_text_len:
+        filler_length = context.width - time_text_len - x
+        filler_text = " " * filler_length
+        try:
+            context.stdscr.attron(curses.color_pair(pairs["seg4"]))
+            context.stdscr.addstr(status_y, x, filler_text)
+            context.stdscr.attroff(curses.color_pair(pairs["seg4"]))
+        except curses.error:
+            pass
+        x = context.width - time_text_len
+    else:
+        x = context.width - time_text_len
+    # Draw Time Segment flush on the right
+    try:
+        context.stdscr.attron(curses.color_pair(pairs["seg4"]))
+        context.stdscr.addstr(status_y, x, time_text)
+        context.stdscr.attroff(curses.color_pair(pairs["seg4"]))
+    except curses.error:
+        pass
+
+def draw_centered_cmdline(context):
+    """
+    Draw a centered command-line dialog box.
+    """
+    box_width = max(40, len(context.command_buffer) + 10)
+    box_height = 5
+    start_y = (context.height - box_height) // 2
+    start_x = (context.width - box_width) // 2
+
+    top_border    = "┌" + "─" * (box_width - 2) + "┐"
+    bottom_border = "└" + "─" * (box_width - 2) + "┘"
+    title = " cmdline "
+
+    if len(title) < box_width - 2:
+        title_start = (box_width - 2 - len(title)) // 2
+        top_line = ("┌" + " " * title_start + title +
+                    " " * (box_width - 2 - title_start - len(title)) + "┐")
+    else:
+        top_line = top_border
+
+    content = f"{CMD_ARROW} {context.command_buffer}"
+    content = content[:box_width - 4].ljust(box_width - 4)
+    content_line = "│ " + content + " │"
+
+    try:
+        context.stdscr.addstr(start_y, start_x, top_line, curses.color_pair(3) | curses.A_BOLD)
+        context.stdscr.addstr(start_y + 1, start_x, content_line, curses.color_pair(3) | curses.A_BOLD)
+        context.stdscr.addstr(start_y + 2, start_x, bottom_border, curses.color_pair(3) | curses.A_BOLD)
+    except curses.error:
+        pass
+
+###############################################################################
+# ORIGINAL SIDEBAR & FILETREE FUNCTIONS (From Original Version)
+###############################################################################
+
 def draw_segment(context, y, x, text, color_pair, arrow=""):
-    """Helper function for drawing a colored text segment with an optional arrow."""
+    """Helper for drawing a colored text segment with an optional arrow."""
     try:
         context.stdscr.attron(curses.color_pair(color_pair))
         context.stdscr.addstr(y, x, text)
@@ -54,12 +315,8 @@ def draw_segment(context, y, x, text, color_pair, arrow=""):
 def draw_sidebar(context, sidebar_width):
     """
     Draw the left sidebar if context.sidebar_visible is True.
-    In normal mode, displays:
-      - Current time on the first line
-      - The title " shrimp "
-      - Either help text if help_mode is on, or the recent sidebar_log messages
-      - Info about a mark if set
-    In filetree or search mode, draws the filetree or search UI instead.
+    In normal mode, displays current time, title, and help or log messages.
+    In filetree or search mode, delegates to respective methods.
     """
     for i in range(context.height):
         try:
@@ -74,7 +331,6 @@ def draw_sidebar(context, sidebar_width):
         draw_filetree(context, sidebar_width)
         return
 
-    # Possibly disable help mode if time expired
     if context.help_mode_expiry and time.time() > context.help_mode_expiry:
         context.sidebar_help_mode = False
         context.help_mode_expiry = None
@@ -130,7 +386,6 @@ def draw_sidebar(context, sidebar_width):
             pass
         y += 1
 
-    # Show mark info if set
     mark_line = context.current_buffer.mark_line
     if mark_line is not None:
         mark_text = f"mark on line {mark_line+1}"
@@ -183,12 +438,10 @@ def draw_filetree(context, sidebar_width):
             display_text = f"{indent}   {file_icon} {node.name}"
         try:
             if is_selected:
-                context.stdscr.addstr(y, 1,
-                                      display_text[:sidebar_width-2],
+                context.stdscr.addstr(y, 1, display_text[:sidebar_width-2],
                                       curses.color_pair(1) | curses.A_BOLD)
             else:
-                context.stdscr.addstr(y, 1,
-                                      display_text[:sidebar_width-2],
+                context.stdscr.addstr(y, 1, display_text[:sidebar_width-2],
                                       curses.color_pair(4))
         except curses.error:
             pass
@@ -196,7 +449,7 @@ def draw_filetree(context, sidebar_width):
 
 def draw_search_sidebar(context, sidebar_width):
     """
-    Draw the sidebar for search mode, showing each match line and snippet.
+    Draw the sidebar for search mode, showing match lines and snippets.
     """
     for i in range(context.height):
         try:
@@ -217,135 +470,25 @@ def draw_search_sidebar(context, sidebar_width):
         display = f"{line_num+1}: {snippet}"
         if idx == context.search_selected_index:
             try:
-                context.stdscr.addstr(idx+1, 1,
-                                      display[:sidebar_width-2],
+                context.stdscr.addstr(idx+1, 1, display[:sidebar_width-2],
                                       curses.color_pair(1) | curses.A_BOLD)
             except curses.error:
                 pass
         else:
             try:
-                context.stdscr.addstr(idx+1, 1,
-                                      display[:sidebar_width-2],
+                context.stdscr.addstr(idx+1, 1, display[:sidebar_width-2],
                                       curses.color_pair(4))
             except curses.error:
                 pass
 
-def draw_status_bar(context):
-    """
-    Draw the status bar at the bottom of the screen.
-
-    In zen mode, only the mode + time are shown. Otherwise, display:
-    mode + file name + dirty marker + buffer info + time.
-    """
-    status_y = context.height - 1
-    if context.zen_mode:
-        mode_seg = f" {context.mode_icons.get(context.mode, '')} {context.mode.upper()} "
-        x = 0
-        try:
-            context.stdscr.addstr(status_y, x, mode_seg, curses.color_pair(5))
-        except curses.error:
-            pass
-        x += len(mode_seg)
-        arrow = ""
-        try:
-            context.stdscr.addstr(status_y, x, arrow, curses.color_pair(3))
-        except curses.error:
-            pass
-        x += len(arrow)
-        time_seg = f" {time.strftime('%H:%M:%S')} "
-        time_seg_len = len(time_seg)
-        for pos in range(x, context.width - time_seg_len):
-            try:
-                context.stdscr.addch(status_y, pos, ' ', curses.color_pair(3))
-            except curses.error:
-                pass
-        try:
-            context.stdscr.addstr(status_y, context.width - time_seg_len,
-                                  time_seg, curses.color_pair(3))
-        except curses.error:
-            pass
-        return
-
-    mode_seg = f" {context.mode_icons.get(context.mode, '')} {context.mode.upper()} "
-    x = 0
-    try:
-        context.stdscr.addstr(status_y, x, mode_seg, curses.color_pair(5))
-    except curses.error:
-        pass
-    x += len(mode_seg)
-
-    arrow = ""
-    try:
-        context.stdscr.addstr(status_y, x, arrow, curses.color_pair(8))
-    except curses.error:
-        pass
-    x += len(arrow)
-
-    filename = context.get_current_filename() or "new file"
-    dirty_mark = '*' if context.current_buffer.modified else ''
-    buf_info = f" [{context.current_buffer_index+1}/{len(context.buffers)}]" if len(context.buffers) > 1 else ""
-    file_seg = f" {os.path.basename(filename)}{dirty_mark}{buf_info} "
-    try:
-        context.stdscr.addstr(status_y, x, file_seg, curses.color_pair(7))
-    except curses.error:
-        pass
-    x += len(file_seg)
-
-    arrow2 = ""
-    try:
-        context.stdscr.addstr(status_y, x, arrow2, curses.color_pair(9))
-    except curses.error:
-        pass
-    x += len(arrow2)
-
-    time_seg = f" {time.strftime('%H:%M:%S')} "
-    time_seg_len = len(time_seg)
-    for pos in range(x, context.width - time_seg_len):
-        try:
-            context.stdscr.addch(status_y, pos, ' ', curses.color_pair(3))
-        except curses.error:
-            pass
-    try:
-        context.stdscr.addstr(status_y, context.width - time_seg_len,
-                              time_seg, curses.color_pair(3))
-    except curses.error:
-        pass
-
-def draw_centered_cmdline(context):
-    """Draw a centered command-line dialog box for command mode."""
-    box_width = max(40, len(context.command_buffer) + 10)
-    box_height = 5
-    start_y = (context.height - box_height) // 2
-    start_x = (context.width - box_width) // 2
-
-    top_border    = "┌" + "─" * (box_width - 2) + "┐"
-    bottom_border = "└" + "─" * (box_width - 2) + "┘"
-    title = " cmdline "
-
-    if len(title) < box_width - 2:
-        title_start = (box_width - 2 - len(title)) // 2
-        top_line = ("┌" + " " * title_start + title +
-                    " " * (box_width - 2 - title_start - len(title)) + "┐")
-    else:
-        top_line = top_border
-
-    content = f"{CMD_ARROW} {context.command_buffer}"
-    content = content[:box_width - 4].ljust(box_width - 4)
-    content_line = "│ " + content + " │"
-
-    try:
-        context.stdscr.addstr(start_y,     start_x, top_line, curses.color_pair(3) | curses.A_BOLD)
-        context.stdscr.addstr(start_y + 1, start_x, content_line, curses.color_pair(3) | curses.A_BOLD)
-        context.stdscr.addstr(start_y + 2, start_x, bottom_border, curses.color_pair(3) | curses.A_BOLD)
-    except curses.error:
-        pass
+###############################################################################
+# OTHER UI FUNCTIONS (Menus, Fullscreen Filetree, Editor Display and Prompt)
+###############################################################################
 
 def show_buffer_menu(context):
     """
-    Display a simple buffer-switch menu (vertical list) for user to select from.
-    Return the chosen buffer index or None if canceled.
+    Display a vertical buffer menu and return the selected buffer index or None if canceled.
     """
-    # Build a list of buffer names
     items = []
     for i, buf in enumerate(context.buffers):
         star = "*" if buf.modified else " "
@@ -355,17 +498,13 @@ def show_buffer_menu(context):
     selected = 0
     height = len(items) + 4
     width = max(len(x) for x in items) + 6
-    if height > context.height:
-        height = context.height
-    if width > context.width:
-        width = context.width
-
+    height = min(height, context.height)
+    width = min(width, context.width)
     start_y = max(0, (context.height - height) // 2)
     start_x = max(0, (context.width - width) // 2)
 
     while True:
         try:
-            # Clear the pop-up area
             for r in range(height):
                 context.stdscr.addstr(start_y + r, start_x, " " * width, curses.color_pair(3))
         except curses.error:
@@ -376,7 +515,7 @@ def show_buffer_menu(context):
         border_bottom = "└" + "─" * (width - 2) + "┘"
         try:
             context.stdscr.addstr(start_y, start_x, border_top, curses.color_pair(3) | curses.A_BOLD)
-            context.stdscr.addstr(start_y, start_x + (width - len(title))//2, title,
+            context.stdscr.addstr(start_y, start_x + (width - len(title)) // 2, title,
                                   curses.color_pair(3) | curses.A_BOLD)
             context.stdscr.addstr(start_y + height - 1, start_x, border_bottom,
                                   curses.color_pair(3) | curses.A_BOLD)
@@ -408,13 +547,13 @@ def show_buffer_menu(context):
             selected = (selected + 1) % len(items)
         elif key in (curses.KEY_ENTER, 10):
             return selected
-        elif key == 27:  # ESC
+        elif key == 27:
             return None
 
 def show_main_menu(context):
     """
-    Full-screen "title screen" main menu for new file, open filetree, directory, search, or quit.
-    Returns the shortcut code of the chosen item (e.g. 'n', 't', 'd', 'f', 'q'), or None if canceled.
+    Full-screen main menu for new file, filetree, directory, search, or quit.
+    Returns the chosen shortcut as a string or None if canceled.
     """
     menu_items = [
         {"label": "new file",      "shortcut": "n", "icon": MENU_NEW_FILE},
@@ -433,7 +572,6 @@ def show_main_menu(context):
     ==== *     |___/_| |_|_|  |_|_| |_| |_| .__/
  ////||\\\\                               |_|
 """
-
     while True:
         context.stdscr.clear()
         for y in range(context.height):
@@ -441,7 +579,6 @@ def show_main_menu(context):
                 context.stdscr.addstr(y, 0, " " * context.width, curses.color_pair(7))
             except curses.error:
                 pass
-
         logo_lines = ascii_logo.splitlines()
         start_y = max(0, (context.height - len(logo_lines)) // 2 - 4)
         for i, line in enumerate(logo_lines):
@@ -450,26 +587,19 @@ def show_main_menu(context):
                 context.stdscr.addstr(start_y + i, x, line, curses.color_pair(7))
             except curses.error:
                 pass
-
         current_time = time.strftime("%H:%M:%S")
         time_line = f" {current_time} "
         try:
-            context.stdscr.addstr(start_y - 2,
-                                  (context.width - len(time_line)) // 2,
-                                  time_line,
-                                  curses.color_pair(7))
+            context.stdscr.addstr(start_y - 2, (context.width - len(time_line)) // 2, time_line, curses.color_pair(7))
         except curses.error:
             pass
-
         menu_title = "menu..."
         try:
             context.stdscr.addstr(start_y + len(logo_lines) + 1,
                                   (context.width - len(menu_title)) // 2,
-                                  menu_title,
-                                  curses.color_pair(7) | curses.A_BOLD)
+                                  menu_title, curses.color_pair(7) | curses.A_BOLD)
         except curses.error:
             pass
-
         start_y_menu = start_y + len(logo_lines) + 3
         for idx, item in enumerate(menu_items):
             line = f" {item['icon']} {item['label']} [{item['shortcut'].upper()}] "
@@ -486,7 +616,6 @@ def show_main_menu(context):
                     context.stdscr.addstr(start_y_menu + idx * 2, x, line, curses.color_pair(7))
                 except curses.error:
                     pass
-
         context.stdscr.refresh()
         key = context.stdscr.getch()
         if key in (curses.KEY_UP, ord('k')):
@@ -499,52 +628,39 @@ def show_main_menu(context):
             c = chr(key).lower()
             for item in menu_items:
                 if c == item["shortcut"]:
-                    return c
+                    return item["shortcut"]
 
 def show_theme_menu(context):
     """
-    Show a theme-selection menu in a small box. Instead of a fixed list,
-    we now read from context.available_themes so that newly added theme files
-    appear automatically.
+    Show a small box with available themes for the user to select.
     """
-    # We gather theme names from context.available_themes:
     themes = sorted(context.available_themes.keys())
-
-    # If the current theme is missing from the dictionary for some reason,
-    # we'll default to index 0
     if context.current_theme in themes:
         selected = themes.index(context.current_theme)
     else:
         selected = 0
-
     height = len(themes) + 4
     width = 30
-    start_y = max(0, (context.height - height)//2)
-    start_x = max(0, (context.width - width)//2)
-
+    start_y = max(0, (context.height - height) // 2)
+    start_x = max(0, (context.width - width) // 2)
     while True:
         try:
             for r in range(height):
                 context.stdscr.addstr(start_y + r, start_x, " " * width, curses.color_pair(3))
         except curses.error:
             pass
-
         title = " Theme Menu "
-        border_top    = "┌" + "─"*(width-2) + "┐"
-        border_bottom = "└" + "─"*(width-2) + "┘"
+        border_top = "┌" + "─" * (width - 2) + "┐"
+        border_bottom = "└" + "─" * (width - 2) + "┘"
         try:
-            context.stdscr.addstr(start_y, start_x, border_top,
-                                  curses.color_pair(3) | curses.A_BOLD)
-            pos_title = start_x + (width - len(title))//2
-            context.stdscr.addstr(start_y, pos_title, title,
-                                  curses.color_pair(3) | curses.A_BOLD)
-            context.stdscr.addstr(start_y+height-1, start_x,
-                                  border_bottom, curses.color_pair(3) | curses.A_BOLD)
+            context.stdscr.addstr(start_y, start_x, border_top, curses.color_pair(3) | curses.A_BOLD)
+            pos_title = start_x + (width - len(title)) // 2
+            context.stdscr.addstr(start_y, pos_title, title, curses.color_pair(3) | curses.A_BOLD)
+            context.stdscr.addstr(start_y + height - 1, start_x, border_bottom, curses.color_pair(3) | curses.A_BOLD)
         except curses.error:
             pass
-
         for i, th in enumerate(themes):
-            row_y = start_y+1 + i
+            row_y = start_y + 1 + i
             if i == selected:
                 line = f"> {th}"
                 style = curses.color_pair(1) | curses.A_BOLD
@@ -552,10 +668,9 @@ def show_theme_menu(context):
                 line = f"  {th}"
                 style = curses.color_pair(3)
             try:
-                context.stdscr.addstr(row_y, start_x+1, line.ljust(width-2), style)
+                context.stdscr.addstr(row_y, start_x + 1, line.ljust(width - 2), style)
             except curses.error:
                 pass
-
         context.stdscr.refresh()
         key = context.stdscr.getch()
         if key == curses.KEY_UP:
@@ -566,27 +681,25 @@ def show_theme_menu(context):
             chosen = themes[selected]
             context.apply_theme(chosen)
             context.log_command(f"theme changed to {chosen}")
-            # Save this theme persistently
             context.save_theme_config()
             return
-        elif key == 27: # ESC
+        elif key == 27:
             return
 
 def show_full_filetree(context):
     """
-    Show a fullscreen file tree in the middle, for selection of a file or directory.
+    Show a full-screen file tree browser and return once a file is selected.
     """
     scroll_offset = 0
     ft_width = 60
     while True:
         context.stdscr.clear()
-        x_offset = max(0, (context.width - ft_width)//2)
+        x_offset = max(0, (context.width - ft_width) // 2)
         for y in range(context.height):
             try:
                 context.stdscr.addstr(y, x_offset, " " * ft_width, curses.color_pair(7))
             except curses.error:
                 pass
-
         visible_items = context.flat_file_list[scroll_offset: scroll_offset + context.height]
         y = 0
         for idx, (node, depth) in enumerate(visible_items):
@@ -598,21 +711,19 @@ def show_full_filetree(context):
                 _, ext = os.path.splitext(node.name)
                 file_icon = FILE_ICONS.get(ext.lower(), DEFAULT_FILE_ICON)
                 display_text = f"{indent}   {file_icon} {node.name}"
-
             if idx + scroll_offset == context.filetree_selection_index:
                 try:
-                    context.stdscr.addstr(y, x_offset+1, display_text[:ft_width-2],
+                    context.stdscr.addstr(y, x_offset + 1, display_text[:ft_width - 2],
                                           curses.color_pair(1) | curses.A_BOLD)
                 except curses.error:
                     pass
             else:
                 try:
-                    context.stdscr.addstr(y, x_offset+1, display_text[:ft_width-2],
+                    context.stdscr.addstr(y, x_offset + 1, display_text[:ft_width - 2],
                                           curses.color_pair(7))
                 except curses.error:
                     pass
             y += 1
-
         context.stdscr.refresh()
         key = context.stdscr.getch()
         if key == curses.KEY_UP:
@@ -622,14 +733,13 @@ def show_full_filetree(context):
             if context.filetree_selection_index < len(context.flat_file_list) - 1:
                 context.filetree_selection_index += 1
         elif key in (curses.KEY_ENTER, 10, curses.KEY_RIGHT):
-            node, d = context.flat_file_list[context.filetree_selection_index]
+            node, _ = context.flat_file_list[context.filetree_selection_index]
             if node.is_dir:
                 node.toggle_expanded()
                 if node.expanded and not node.children:
                     filetree.load_children(node, context.show_hidden, context)
                 context.flat_file_list = filetree.flatten_tree(context.file_tree_root)
             else:
-                # Open file
                 try:
                     with open(node.path, 'r', encoding='utf-8') as f:
                         content = f.read().splitlines()
@@ -643,24 +753,19 @@ def show_full_filetree(context):
                 context.mode = "normal"
                 return
         elif key == curses.KEY_LEFT:
-            node, d = context.flat_file_list[context.filetree_selection_index]
+            node, _ = context.flat_file_list[context.filetree_selection_index]
             if node.is_dir and node.expanded:
                 node.toggle_expanded()
                 context.flat_file_list = filetree.flatten_tree(context.file_tree_root)
-            else:
-                if node.parent is not None:
-                    for i, (n, dd) in enumerate(context.flat_file_list):
-                        if n == node.parent:
-                            context.filetree_selection_index = i
-                            break
+            elif node.parent is not None:
+                for i, (n, _) in enumerate(context.flat_file_list):
+                    if n == node.parent:
+                        context.filetree_selection_index = i
+                        break
         elif key == ord('a'):
             context.show_hidden = not context.show_hidden
             root_path = context.file_tree_root.path
-            context.file_tree_root = filetree.FileNode(
-                context.file_tree_root.name,
-                root_path,
-                True
-            )
+            context.file_tree_root = filetree.FileNode(context.file_tree_root.name, root_path, True)
             context.file_tree_root.expanded = True
             filetree.load_children(context.file_tree_root, context.show_hidden, context)
             context.flat_file_list = filetree.flatten_tree(context.file_tree_root)
@@ -671,45 +776,35 @@ def show_full_filetree(context):
         elif key == curses.KEY_NPAGE:
             if scroll_offset < max(0, len(context.flat_file_list) - context.height):
                 scroll_offset = min(len(context.flat_file_list) - 1, scroll_offset + 1)
-        elif key == 27: # ESC
+        elif key == 27:
             context.mode = "normal"
             return
 
 def draw_search_preview(context, x_offset, visible_height):
     """
-    When in search mode, highlight the currently selected search result
-    in the main text area. Replace references to context.cursor_line with
-    context.current_buffer.cursor_line so we don't get attribute errors.
+    In search mode, highlight the currently selected line in the main text area.
     """
     lines = context.current_buffer.lines
-
-    # Use buffer-based cursor positions
     if context.current_buffer.cursor_line < context.current_buffer.scroll:
         context.current_buffer.scroll = context.current_buffer.cursor_line
     if context.current_buffer.cursor_line >= context.current_buffer.scroll + visible_height:
         context.current_buffer.scroll = context.current_buffer.cursor_line - visible_height + 1
-
     if context.current_buffer.scroll < 0:
         context.current_buffer.scroll = 0
     if context.current_buffer.scroll > max(0, len(lines) - visible_height):
         context.current_buffer.scroll = max(0, len(lines) - visible_height)
-
     for i in range(visible_height):
         line_index = context.current_buffer.scroll + i
         if line_index < len(lines):
-            # Compare line_index to context.current_buffer.cursor_line
             is_current_line = (line_index == context.current_buffer.cursor_line)
             indicator = "-> " if is_current_line else "   "
             line_number = f"{line_index+1:<3}"
             prefix_len = 7
             safe_line = lines[line_index][:max(0, context.width - x_offset - prefix_len)]
             text = f"{indicator}{line_number}{safe_line}"
-            if is_current_line:
-                text_display = text.ljust(context.width - x_offset)
-                color = curses.color_pair(10)
-            else:
-                text_display = text
-                color = curses.color_pair(2)
+            # Use color pair 10 for current line, and pair 2 for normal lines.
+            color = curses.color_pair(10) if is_current_line else curses.color_pair(2)
+            text_display = text.ljust(context.width - x_offset)
             try:
                 context.stdscr.addstr(i, x_offset, text_display, color)
             except curses.error:
@@ -717,26 +812,24 @@ def draw_search_preview(context, x_offset, visible_height):
 
 def display(context):
     """
-    Orchestrates redrawing the entire screen: sidebar, main text, status bar,
-    plus command line if needed.
+    Re-draw the entire screen: sidebar, main text area, status bar, and command-line dialog (if active).
     """
     context.height, context.width = context.stdscr.getmaxyx()
     visible_height = context.height - 1
+
+    # Fill main text area background using theme color (color pair 2)
     if context.sidebar_visible and context.width >= 80:
         sidebar_width = 30
     elif context.sidebar_visible:
         sidebar_width = 20
     else:
         sidebar_width = 0
-
     context.stdscr.clear()
     if context.sidebar_visible:
         draw_sidebar(context, sidebar_width)
 
     x_offset = sidebar_width
     text_area_width = context.width - x_offset
-
-    # Fill text area background
     for i in range(visible_height):
         try:
             context.stdscr.addstr(i, x_offset, " " * text_area_width, curses.color_pair(2))
@@ -755,110 +848,87 @@ def display(context):
             context.current_buffer.scroll = 0
         if context.current_buffer.scroll > max(0, len(lines) - visible_height):
             context.current_buffer.scroll = max(0, len(lines) - visible_height)
-
         for i in range(visible_height):
             line_index = context.current_buffer.scroll + i
             if line_index < len(lines):
-                if context.zen_mode:
-                    indicator = ""
-                    line_number = ""
-                    prefix_len = 0
-                else:
-                    indicator = "-> " if line_index == context.current_buffer.cursor_line else "   "
+                is_current_line = (line_index == context.current_buffer.cursor_line)
+                indicator = "-> " if is_current_line else "   "
+                if not context.zen_mode:
                     line_number = f"{line_index+1:<3}"
                     prefix_len = 7
-                safe_line = lines[line_index][:max(0, text_area_width - prefix_len)]
-                text = f"{indicator}{line_number}{(' ' if not context.zen_mode else '')}{safe_line}"
-                if line_index == context.current_buffer.cursor_line:
-                    text_display = text.ljust(text_area_width)
-                    color = curses.color_pair(10)
                 else:
-                    text_display = text
-                    color = curses.color_pair(2)
+                    line_number = ""
+                    prefix_len = 0
+                safe_line = lines[line_index][:max(0, text_area_width - prefix_len)]
+                text = f"{indicator}{line_number}{safe_line}"
+                # Use color pair 10 for current line, pair 2 for normal background
+                color = curses.color_pair(10) if is_current_line else curses.color_pair(2)
+                text_display = text.ljust(text_area_width)
                 try:
                     context.stdscr.addstr(i, x_offset, text_display, color)
                 except curses.error:
                     pass
 
     draw_status_bar(context)
-
-    # If in command mode, draw command line UI
     if context.mode == "command":
         draw_centered_cmdline(context)
-
-    # Place the cursor based on current_buffer's cursor position
     cursor_y = context.current_buffer.cursor_line - context.current_buffer.scroll
     cursor_x = context.current_buffer.cursor_col
     if not context.zen_mode:
-        cursor_x += 7  # skip indicator + line number
+        cursor_x += 7
     cursor_x += x_offset
     try:
         curses.curs_set(2)
         context.stdscr.move(cursor_y, cursor_x)
-    except:
+    except curses.error:
         pass
-
     context.stdscr.refresh()
 
-################################
-# Prompt Input Function
-################################
 def prompt_input(context, prompt: str) -> str:
     """
-    Prompt the user for a single line of text in a small dialog,
-    returning the user input or an empty string if ESC is pressed.
-    This is a simpler approach that mimics the style of the
-    command-line box in the center of the screen.
+    Prompt the user for input in a centered dialog box.
+    Returns the entered string, or an empty string if canceled.
     """
     old_mode = context.mode
     context.mode = "command"
     saved_command_buffer = context.command_buffer
     context.command_buffer = ""
-
     curses.curs_set(1)
     try:
         while True:
             context.stdscr.clear()
             for y in range(context.height):
                 try:
-                    context.stdscr.addstr(y, 0, " " * context.width, curses.color_pair(2))
+                    context.stdscr.addstr(y, 0, " " * context.width, curses.color_pair(0))
                 except curses.error:
                     pass
-
             box_width = max(40, len(prompt) + 10, len(context.command_buffer) + 10)
             box_height = 5
             start_y = (context.height - box_height) // 2
             start_x = (context.width - box_width) // 2
-
             top_border = "┌" + "─" * (box_width - 2) + "┐"
             bottom_border = "└" + "─" * (box_width - 2) + "┘"
             title = f" {prompt} "
-
             if len(title) < box_width - 2:
                 title_start = (box_width - 2 - len(title)) // 2
                 top_line = ("┌" + " " * title_start + title +
                             " " * (box_width - 2 - title_start - len(title)) + "┐")
             else:
                 top_line = top_border
-
-            typed_str = context.command_buffer[: box_width - 4]
-            typed_str = typed_str.ljust(box_width - 4)
+            typed_str = context.command_buffer[:box_width - 4].ljust(box_width - 4)
             content_line = "│ " + typed_str + " │"
-
             try:
-                context.stdscr.addstr(start_y,     start_x, top_line, curses.color_pair(3) | curses.A_BOLD)
+                context.stdscr.addstr(start_y, start_x, top_line, curses.color_pair(3) | curses.A_BOLD)
                 context.stdscr.addstr(start_y + 1, start_x, content_line, curses.color_pair(3) | curses.A_BOLD)
                 context.stdscr.addstr(start_y + 2, start_x, bottom_border, curses.color_pair(3) | curses.A_BOLD)
                 context.stdscr.move(start_y + 1, start_x + 2 + len(context.command_buffer))
             except curses.error:
                 pass
-
             context.stdscr.refresh()
             key = context.stdscr.getch()
-
             if key in (curses.KEY_ENTER, 10):
                 return context.command_buffer.strip()
-            elif key == 27:  # ESC key
+            elif key == 27:
                 return ""
             elif key in (8, curses.KEY_BACKSPACE, 127):
                 context.command_buffer = context.command_buffer[:-1]

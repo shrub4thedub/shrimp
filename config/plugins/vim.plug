@@ -1,0 +1,74 @@
+def vim
+    title       Classic Vim Key‑Bindings
+    description Minimal hjkl movement, 0/$, basic line ops, and ':' command mode.
+
+    # ────────── MOVEMENT ──────────
+    bind h mode normal
+        if ctx.current_buffer.cursor_col > 0:
+            ctx.current_buffer.cursor_col -= 1
+
+    bind j mode normal
+        if ctx.current_buffer.cursor_line < len(ctx.current_buffer.lines)-1:
+            ctx.current_buffer.cursor_line += 1
+            ctx.current_buffer.cursor_col = min(
+                ctx.current_buffer.cursor_col,
+                len(ctx.current_buffer.lines[ctx.current_buffer.cursor_line])
+            )
+
+    bind k mode normal
+        if ctx.current_buffer.cursor_line > 0:
+            ctx.current_buffer.cursor_line -= 1
+            ctx.current_buffer.cursor_col = min(
+                ctx.current_buffer.cursor_col,
+                len(ctx.current_buffer.lines[ctx.current_buffer.cursor_line])
+            )
+
+    bind l mode normal
+        if ctx.current_buffer.cursor_col < len(
+                ctx.current_buffer.lines[ctx.current_buffer.cursor_line]):
+            ctx.current_buffer.cursor_col += 1
+
+    bind 0 mode normal
+        ctx.current_buffer.cursor_col = 0
+
+    bind $ mode normal
+        ctx.current_buffer.cursor_col = len(
+            ctx.current_buffer.lines[ctx.current_buffer.cursor_line])
+
+    # ────────── INSERT / APPEND / OPEN ──────────
+    bind i mode normal
+        ctx.mode = "insert"
+
+    bind a mode normal
+        if ctx.current_buffer.cursor_col < len(
+                ctx.current_buffer.lines[ctx.current_buffer.cursor_line]):
+            ctx.current_buffer.cursor_col += 1
+        ctx.mode = "insert"
+
+    bind o mode normal
+        ctx.current_buffer.insert_line_below()
+        ctx.mode = "insert"
+
+    # ────────── LINE OPS ──────────
+    bind d mode normal
+        ctx.current_buffer.delete_line()
+        log("vim‑d: line deleted")
+
+    bind y mode normal
+        ctx.clipboard = ctx.current_buffer.copy_line()
+        log("vim‑y: line yanked")
+
+    bind p mode normal
+        if ctx.clipboard:
+            ctx.current_buffer.paste_lines(ctx.clipboard)
+            log("vim‑p: line pasted")
+
+    # ────────── COMMAND MODE ──────────
+    bind : mode normal
+        ctx.mode = "command"
+        ctx.command_buffer = ""
+        log("vim ':' command mode")
+
+    # ────────── QUICK HELP ──────────
+    bind vimhelp mode command
+        log("Vim plugin: hjkl move • 0 $ ends • i a o insert • d y p ops • ':' cmd mode")

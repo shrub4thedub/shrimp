@@ -31,7 +31,7 @@ Press **o** in normal mode to enter command mode
 shrimp supports user-created themes. simply drop `.py` theme files in `~/shrimp/config/themes/`, then use **`->th`** to pick a color scheme on the fly. theres an example theme you can copy and tweak to your liking.
 
 ## Plugins
-shrimp supports user-created plugins as well! put some .plug files in /shrimp/config/plugins. we've got some premade ones for you to copy and tweak and learn from as well!
+shrimp supports user-created plugins as well! put some .plug files in /shrimp/config/plugins. i included a vim.plug with some basic vim motions if you like that sort of thing.
 
 ## Installation
 i havent thought about how to do this yet im still learning give it time.....

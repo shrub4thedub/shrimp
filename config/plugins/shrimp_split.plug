@@ -1,0 +1,52 @@
+def splits
+title Split into two vertical panes
+description splits! 󰘍split to pick a file to be in your second split, f/g to switch focus, 󰘍qs to close a split.
+ 
+
+bind split mode command
+	description open filetree to chose a file to be in your new split
+    import sys
+    from shrimp.plugins import PLUGIN_DIR
+    if PLUGIN_DIR not in sys.path:
+        sys.path.insert(0, PLUGIN_DIR)
+    import shrimp_split as ss
+    ss.begin_split(ctx, log, status, api)
+    log("󰘍split  new split")
+
+bind f mode normal
+    description switch focus to first split
+    import sys
+    from shrimp.plugins import PLUGIN_DIR
+    if PLUGIN_DIR not in sys.path:
+        sys.path.insert(0, PLUGIN_DIR)
+    import shrimp_split as ss
+    ss.focus_left(ctx, log, status, api)
+
+bind g mode normal
+    description switch focus to second split
+    import sys
+    from shrimp.plugins import PLUGIN_DIR
+    if PLUGIN_DIR not in sys.path:
+        sys.path.insert(0, PLUGIN_DIR)
+    import shrimp_split as ss
+    ss.focus_right(ctx, log, status, api)
+
+bind qs mode command
+    if getattr(ctx, 'split_active', False):
+        other = 1 - ctx.split_focus
+        ps    = ctx.panes[other]
+        import shrimp.ui.screen as ui_screen
+        # restore original display and remove the marker so we can split again
+        ui_screen.display      = ui_screen._orig_display
+        delattr(ui_screen, '_orig_display')
+        ctx.split_active       = False
+        ctx.panes              = []
+        # go back to the remaining pane full‑screen
+        ctx.switch_to_buffer(ps.buf_index)
+        ctx.current_buffer.cursor_line = ps.cursor_line
+        ctx.current_buffer.cursor_col  = ps.cursor_col
+        ctx.current_buffer.scroll      = ps.scroll
+        status("Split closed.")
+        log("󰘍qs  split closed")
+        return
+

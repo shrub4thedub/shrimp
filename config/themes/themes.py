@@ -1,7 +1,7 @@
 """
 themes.py
 
-Holds the built-in Shrimp themes in a Python dictionary form. 
+Holds the built-in themes in a Python dictionary form. 
 Any additional .py files in this directory that define `theme_data` and `theme_name`
 will also be auto-detected and included.
 """
@@ -22,7 +22,7 @@ def get_builtin_themes():
             "highlight": (52, 55, 70),
         },
         "shrimp": {
-            "bg": (30, 30, 30),
+            "bg": (30, 30, 30),                                           
             "fg": (250, 240, 230),
             "sel": (80, 60, 50),
             "accent": (255, 165, 125),
@@ -40,4 +40,3 @@ def get_builtin_themes():
             "highlight": (69, 71, 90),
         },
     }
-

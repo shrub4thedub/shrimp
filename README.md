@@ -35,4 +35,3 @@ shrimp supports user-created plugins as well! put some .plug files in /shrimp/co
 
 ## Installation
 i havent thought about how to do this yet im still learning give it time.....
-

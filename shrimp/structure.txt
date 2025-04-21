@@ -1,5 +1,8 @@
-/home/shrub/shrimp
+shrimp
 ├── config
+│   ├── plugins
+│   │   ├── plugins.conf
+│   │   └── vim.plug
 │   ├── shrimp.conf
 │   └── themes
 │       ├── bareminimum.py
@@ -18,26 +21,11 @@
 ├── shrimp
 │   ├── buffer.py
 │   ├── commands.py
-│   ├── config
-│   │   ├── shrimp.conf
-│   │   └── themes
-│   │       ├── bareminimum.py
-│   │       ├── example.py
-│   │       ├── gruvbox.py
-│   │       ├── __pycache__
-│   │       │   ├── bareminimum.cpython-313.pyc
-│   │       │   ├── example.cpython-313.pyc
-│   │       │   ├── gruvbox.cpython-313.pyc
-│   │       │   ├── nord.cpython-313.pyc
-│   │       │   └── themes.cpython-313.pyc
-│   │       ├── shrimp.log
-│   │       ├── theme.conf
-│   │       └── themes.py
-│   ├── everything
 │   ├── filetree.py
 │   ├── __init__.py
 │   ├── logger.py
 │   ├── __main__.py
+│   ├── plugins.py
 │   ├── __pycache__
 │   │   ├── buffer.cpython-313.pyc
 │   │   ├── commands.cpython-313.pyc
@@ -45,9 +33,12 @@
 │   │   ├── __init__.cpython-313.pyc
 │   │   ├── logger.cpython-313.pyc
 │   │   ├── __main__.cpython-313.pyc
-│   │   └── main.cpython-313.pyc
+│   │   ├── main.cpython-313.pyc
+│   │   ├── plugins.cpython-313.pyc
+│   │   └── themes.cpython-313.pyc
 │   ├── shrimp.log
 │   ├── structure.txt
+│   ├── themes.py
 │   └── ui
 │       ├── __init__.py
 │       ├── input.py
@@ -58,4 +49,4 @@
 │       └── screen.py
 └── shrimp.log
 
-12 directories, 47 files
+9 directories, 41 files

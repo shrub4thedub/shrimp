@@ -8,6 +8,10 @@ import curses
 import time
 from shrimp import commands, filetree
 
+
+# ──────────────────────────────────────────────────────────────────────────────
+# NORMAL MODE
+# ──────────────────────────────────────────────────────────────────────────────
 def handle_normal_mode(context, key: int):
 
     if context.plugin_manager.handle_key_event('normal', key, context):
@@ -70,7 +74,7 @@ def handle_normal_mode(context, key: int):
     # If we have a numeric prefix, handle certain commands (d, y, D, x)
     if context.normal_number_buffer:
         ch = chr(key) if 32 <= key < 127 else None
-        if ch in ('d','y','D','x'):
+        if ch in ('d', 'y', 'D', 'x'):
             try:
                 count = int(context.normal_number_buffer)
             except (ValueError, OverflowError):
@@ -104,7 +108,7 @@ def handle_normal_mode(context, key: int):
                 )
             # Fall through to normal key handling
 
-    # Single-char normal mode actions
+    # ── single‑char normal‑mode actions ─────────────────────────────────────
     if key == ord('m'):
         # Mark set/jump
         if context.current_buffer.mark_line is None:
@@ -181,7 +185,7 @@ def handle_normal_mode(context, key: int):
             context.status_message = f"switched to buffer {context.current_buffer_index + 1}"
         return
 
-    # Standard arrow/home/end navigation
+    # ── navigation keys ────────────────────────────────────────────────────
     if key == curses.KEY_UP and context.current_buffer.cursor_line > 0:
         context.current_buffer.cursor_line -= 1
         return
@@ -205,12 +209,12 @@ def handle_normal_mode(context, key: int):
     if key == curses.KEY_END:
         context.current_buffer.cursor_col = len(context.current_buffer.lines[context.current_buffer.cursor_line])
         return
-    if key == curses.KEY_PPAGE:
+    if key == curses.KEY_PPAGE:  # Page‑Up
         visible_height = max(1, context.height - 1)
         context.current_buffer.scroll = max(0, context.current_buffer.scroll - visible_height)
         context.current_buffer.cursor_line = max(0, context.current_buffer.cursor_line - visible_height)
         return
-    if key == curses.KEY_NPAGE:
+    if key == curses.KEY_NPAGE:  # Page‑Down
         visible_height = max(1, context.height - 1)
         if context.current_buffer.scroll < len(context.current_buffer.lines) - visible_height:
             context.current_buffer.scroll = min(
@@ -232,19 +236,16 @@ def handle_normal_mode(context, key: int):
 
     # Additional single-letter commands
     if key == ord('h'):
-        # Move to start of line
-        context.current_buffer.cursor_col = 0
+        context.current_buffer.cursor_col = 0              # start of line
         context.log_command("h: startline")
         return
     if key == ord('j'):
-        # Move to end of line
-        line_str = context.current_buffer.lines[context.current_buffer.cursor_line]
-        context.current_buffer.cursor_col = len(line_str)
+        context.current_buffer.cursor_col = len(
+            context.current_buffer.lines[context.current_buffer.cursor_line])  # end of line
         context.log_command("j: endline")
         return
     if key == ord('w'):
-        # Next keystroke is word action
-        context.word_mode = True
+        context.word_mode = True                            # next key is word action
         return
     if key == ord('p'):
         # Replace entire line
@@ -255,8 +256,14 @@ def handle_normal_mode(context, key: int):
         context.log_command("p: line change")
         return
 
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INSERT MODE
+# ──────────────────────────────────────────────────────────────────────────────
 def handle_insert_mode(context, key: int):
     """Handle a key press in insert mode."""
+    if context.plugin_manager.handle_key_event('insert', key, context):
+        return
     # Ensure cursor_line is valid
     if context.current_buffer.cursor_line < 0:
         context.current_buffer.cursor_line = 0
@@ -275,10 +282,12 @@ def handle_insert_mode(context, key: int):
         context.pending_word_change = False
         return
 
-    # ESC -> normal mode
+    # ESC → normal mode
     if key == 27:  # ESC
         context.mode = "normal"
         return
+
+    # ── navigation inside insert mode ─────────────────────────────────────
     if key == curses.KEY_UP and context.current_buffer.cursor_line > 0:
         context.current_buffer.cursor_line -= 1
         context.current_buffer.cursor_col = min(
@@ -308,13 +317,13 @@ def handle_insert_mode(context, key: int):
             context.current_buffer.lines[context.current_buffer.cursor_line])
         return
 
+    # Enter → split line
     if key in (curses.KEY_ENTER, 10):
-        # Split line
         context.current_buffer.split_line()
         return
 
+    # Backspace handling
     if key in (8, curses.KEY_BACKSPACE, 127):
-        # Backspace handling
         if context.current_buffer.cursor_col > 0:
             line = context.current_buffer.lines[context.current_buffer.cursor_line]
             new_line = line[:context.current_buffer.cursor_col - 1] + line[context.current_buffer.cursor_col:]
@@ -324,8 +333,8 @@ def handle_insert_mode(context, key: int):
         else:
             # Merge with previous line if possible
             if context.current_buffer.cursor_line > 0:
-                prev_line_index = context.current_buffer.cursor_line - 1
-                prev_line = context.current_buffer.lines[prev_line_index]
+                prev_idx = context.current_buffer.cursor_line - 1
+                prev_line = context.current_buffer.lines[prev_idx]
                 curr_line = context.current_buffer.lines.pop(context.current_buffer.cursor_line)
                 context.current_buffer.cursor_line -= 1
                 context.current_buffer.cursor_col = len(prev_line)
@@ -333,35 +342,91 @@ def handle_insert_mode(context, key: int):
                 context.current_buffer.modified = True
         return
 
-    # Insert a printable character
-    if 32 <= key <= 126:
+    # ── **BATCH INSERTION WITH TAB SUPPORT** ──────────────────────────────
+    if key == 9 or 32 <= key <= 126:        # include Tab (ASCII 9) + printable chars
         ch = chr(key)
         line = context.current_buffer.lines[context.current_buffer.cursor_line]
+        # Insert the first character
         new_line = line[:context.current_buffer.cursor_col] + ch + line[context.current_buffer.cursor_col:]
         context.current_buffer.lines[context.current_buffer.cursor_line] = new_line
         context.current_buffer.cursor_col += 1
         context.current_buffer.modified = True
-        return
 
+        # Read any further queued characters without interim redraws
+        context.stdscr.nodelay(True)  # non‑blocking read
+        while True:
+            k2 = context.stdscr.getch()
+            if k2 == -1:                      # no more input
+                break
+
+            # Stop batching on control keys or when ending pending change modes
+            if k2 in (curses.KEY_ENTER, 10, 27):           # Enter / ESC
+                curses.ungetch(k2)
+                break
+            if context.pending_line_change and k2 in (curses.KEY_ENTER, 10):
+                curses.ungetch(k2)
+                break
+            if context.pending_word_change and k2 == 32:   # space ends word‑change
+                curses.ungetch(k2)
+                break
+
+            # Printable / Tab → insert immediately
+            if k2 == 9 or 32 <= k2 <= 126:
+                ch2 = chr(k2)
+                line = context.current_buffer.lines[context.current_buffer.cursor_line]
+                new_line = line[:context.current_buffer.cursor_col] + ch2 + line[context.current_buffer.cursor_col:]
+                context.current_buffer.lines[context.current_buffer.cursor_line] = new_line
+                context.current_buffer.cursor_col += 1
+                context.current_buffer.modified = True
+                continue
+
+            # Any other key → push back & stop batching
+            curses.ungetch(k2)
+            break
+
+        context.stdscr.nodelay(False)        # restore blocking mode
+        return                                # one redraw will show all inserted text
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMMAND MODE
+# ──────────────────────────────────────────────────────────────────────────────
 def handle_command_mode(context, key: int):
     """Handle a key press in command (:) mode."""
-    if key == 27:  # ESC
+    import curses                                 # already imported at top
+
+    # Esc – cancel command‑line mode
+    if key == 27:
         context.mode = "normal"
         context.command_buffer = ""
         return
+
+    # Enter – finish typing, run command
     if key in (curses.KEY_ENTER, 10):
         cmd = context.command_buffer.strip()
         context.mode = "normal"
         context.command_buffer = ""
+
+        # ── let plugins try first ─────────────────────────────
+        if context.plugin_manager.handle_command(cmd, context):
+            return        # a plugin consumed the command
+        # ─────────────────────────────────────────────────────
+
+        # built‑in commands
         commands.process_command(context, cmd)
         return
 
-    # Basic text input in command mode
+    # regular editing of the command buffer
     if key in (8, curses.KEY_BACKSPACE, 127):
         context.command_buffer = context.command_buffer[:-1]
     elif 32 <= key <= 126:
         context.command_buffer += chr(key)
 
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# FILETREE MODE
+# ──────────────────────────────────────────────────────────────────────────────
 def handle_filetree_mode(context, key: int):
 
     if context.plugin_manager.handle_key_event('filetree', key, context):
@@ -423,9 +488,10 @@ def handle_filetree_mode(context, key: int):
         context.mode = "normal"
         context.status_message = "exited file tree mode."
 
-#########################################
-# NEW: handle_search_mode for arrow nav
-#########################################
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SEARCH MODE
+# ──────────────────────────────────────────────────────────────────────────────
 def handle_search_mode(context, key: int):
     """
     Handle a key press in search (f) mode.
@@ -451,4 +517,3 @@ def handle_search_mode(context, key: int):
     else:
         # Optional: pass other keys to normal mode
         handle_normal_mode(context, key)
-

@@ -1,0 +1,174 @@
+def clipman
+title       Clipboard Manager
+description Tracks yanks.  \
+            Toggle with :cm; press 0‑9 to re‑copy and close bar.
+
+########################################################################
+# 1) Toggle sidebar + register draw‑hook once
+########################################################################
+bind cm mode command
+vis = getattr(ctx, "clipbar_open", False)
+ctx.clipbar_open = not vis
+
+if not getattr(ctx, "_clipbar_hook_added", False):
+    def _drawbar(c):
+        import curses
+        # draw only when open
+        if not getattr(c, "clipbar_open", False):
+            return
+
+        h, w = c.stdscr.getmaxyx()
+        bar_w = 30 if w >= 100 else 24
+        if bar_w >= w:
+            return
+        x0 = w - bar_w
+        BG = curses.color_pair(4)
+        HL = curses.color_pair(1) | curses.A_BOLD
+
+        # clear column
+        for y in range(h - 1):
+            api.draw(y, x0, " " * bar_w, BG)
+
+        # header
+        api.draw(0, x0 + 1, "   CLIPBOARD ".ljust(bar_w - 2), HL)
+
+        # list entries: newest first
+        hist = c.__dict__.get("clip_hist", [])
+        for i, txt in enumerate(hist[: h - 2]):
+            idx = str(i).rjust(2)
+            line = f"{idx}  {txt.replace(chr(10), '⏎')}"
+            api.draw(i + 1, x0 + 1, line[: bar_w - 2], BG)
+
+    api.add_draw_hook(_drawbar)
+    ctx._clipbar_hook_added = True
+
+log("clipman " + ("on" if ctx.clipbar_open else "off"))
+
+########################################################################
+# 2) Override yank & yank‑paragraph to record every copy (no timestamps)
+########################################################################
+bind y mode normal
+clip = ctx.current_buffer.copy_line()
+ctx.clipboard = clip
+hist = ctx.__dict__.setdefault("clip_hist", [])
+raw = clip.rstrip("\n")
+last = ctx.__dict__.get("_last_clip")
+if raw and raw != last:
+    hist.insert(0, raw)
+    hist[:] = hist[:50]
+    ctx.__dict__["_last_clip"] = raw
+log("y: copyline")
+
+bind Y mode normal
+clip = ctx.current_buffer.copy_paragraph()
+ctx.clipboard = clip
+hist = ctx.__dict__.setdefault("clip_hist", [])
+raw = clip.rstrip("\n")
+last = ctx.__dict__.get("_last_clip")
+if raw and raw != last:
+    hist.insert(0, raw)
+    hist[:] = hist[:50]
+    ctx.__dict__["_last_clip"] = raw
+log("Y: copy para")
+
+########################################################################
+# 3) Paste stays normal (we don’t record on paste)
+########################################################################
+bind u mode normal
+ctx.current_buffer.paste_lines(ctx.clipboard)
+log("u: paste")
+
+########################################################################
+# 4) Disable main‑area edits while sidebar is open
+########################################################################
+for key in ["i","o","d","D","p","x","h","j","k","l"]:
+    bind {key} mode normal
+    if getattr(ctx, "clipbar_open", False):
+        status("Close clipboard first")
+    else:
+        # fall back to default behavior
+        commands.process_command(ctx, key) if key in ("o","d","p","x") else \
+        setattr(ctx, "mode", "insert") if key=="i" else None
+
+########################################################################
+# 5) Numeric keys 0‑9 – re‑copy and CLOSE the bar
+########################################################################
+bind 0 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 1:
+        ctx.clipboard = h[0]
+        ctx.clipbar_open = False
+        log("clip 0 copied")
+
+bind 1 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 2:
+        ctx.clipboard = h[1]
+        ctx.clipbar_open = False
+        log("clip 1 copied")
+
+bind 2 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 3:
+        ctx.clipboard = h[2]
+        ctx.clipbar_open = False
+        log("clip 2 copied")
+
+bind 3 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 4:
+        ctx.clipboard = h[3]
+        ctx.clipbar_open = False
+        log("clip 3 copied")
+
+bind 4 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 5:
+        ctx.clipboard = h[4]
+        ctx.clipbar_open = False
+        log("clip 4 copied")
+
+bind 5 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 6:
+        ctx.clipboard = h[5]
+        ctx.clipbar_open = False
+        log("clip 5 copied")
+
+bind 6 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 7:
+        ctx.clipboard = h[6]
+        ctx.clipbar_open = False
+        log("clip 6 copied")
+
+bind 7 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 8:
+        ctx.clipboard = h[7]
+        ctx.clipbar_open = False
+        log("clip 7 copied")
+
+bind 8 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 9:
+        ctx.clipboard = h[8]
+        ctx.clipbar_open = False
+        log("clip 8 copied")
+
+bind 9 mode normal
+if getattr(ctx, "clipbar_open", False):
+    h = ctx.__dict__.get("clip_hist", [])
+    if len(h) >= 10:
+        ctx.clipboard = h[9]
+        ctx.clipbar_open = False
+        log("clip 9 copied")

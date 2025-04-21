@@ -1,6 +1,8 @@
 """
 Main entry point and editor context for the Shrimp text editor.
 """
+from shrimp import plugins
+
 import curses
 import os
 import time
@@ -8,7 +10,6 @@ import sys
 import importlib.util
 
 from shrimp import buffer, filetree, logger, commands, ui
-from shrimp import plugins
 
 class EditorContext:
     """
@@ -105,6 +106,9 @@ class EditorContext:
         # Then see if we can load a saved theme from theme.conf
         # If the user’s saved theme is recognized, we’ll apply it
         self.load_theme_config()
+        
+        
+        self.plugin_manager = plugins.get_plugin_manager()
 
         # Running flag
         self.exit_flag = False

@@ -11,6 +11,8 @@ import curses
 import time
 import subprocess
 from shrimp import logger, filetree
+from shrimp import plugins
+from wcwidth import wcswidth
 
 # Icons and symbols
 FOLDER_ICON_CLOSED = " "
@@ -548,6 +550,7 @@ def show_buffer_menu(context):
         except curses.error:
             pass
 
+
         for idx, label in enumerate(items):
             row_y = start_y + 1 + idx
             if row_y >= start_y + height - 1:
@@ -576,6 +579,17 @@ def show_buffer_menu(context):
         elif key == 27:
             return None
 
+import time
+import curses
+from wcwidth import wcswidth
+
+def pad_line(text, width):
+    """Pad or trim a string to match the visual width."""
+    visual_width = wcswidth(text)
+    if visual_width >= width:
+        return text[:width]
+    return text + " " * (width - visual_width)
+
 def show_main_menu(context):
     """
     Full-screen main menu for new file, filetree, directory, search, or quit.
@@ -590,71 +604,90 @@ def show_main_menu(context):
     ]
 
     selected = 0
-    ascii_logo = r"""
-                    _          _             
-        \ \     ___| |__  _ __(_)_ __ ___  _ __  
--==-_    / /   / __| '_ \| '__| | '_ ` _ \| '_ \ 
-  ==== =/_/    \__ \ | | | |  | | | | | | | |_) |
-    ==== *     |___/_| |_|_|  |_|_| |_| |_| .__/
- ////||\\\\                               |_|
-"""
+    ascii_logo = (
+    "               _          _             \n"
+    "        \\ \\     ___| |__  _ __(_)_ __ ___  _ __  \n"
+    "-==-_    / /   / __| '_ \\| '__| | '_ ` _ \\| '_ \\ \n"
+    "  ==== =/_/    \\__ \\ | | | |  | | | | | | | |_) |\n"
+    "    ==== *    |___/_| |_|_|  |_|_| |_| |_| .__/\n"
+    " ////||\\\\\\\\                             |_|  "
+)
+
+
+
     while True:
         context.stdscr.clear()
-        for y in range(context.height):
+        height, width = context.height, context.width
+
+        # Background fill
+        for y in range(height):
             try:
-                context.stdscr.addstr(y, 0, " " * context.width, curses.color_pair(7))
+                context.stdscr.addstr(y, 0, " " * width, curses.color_pair(7))
             except curses.error:
                 pass
-        logo_lines = ascii_logo.splitlines()
-        start_y = max(0, (context.height - len(logo_lines)) // 2 - 4)
+
+        # Display logo
+        from wcwidth import wcswidth
+
+        logo_lines = ascii_logo.strip("\n").splitlines()
+        start_y = max(0, (context.height - len(logo_lines)) // 2)
+
         for i, line in enumerate(logo_lines):
-            x = (context.width - len(line)) // 2
+            x = max(0, (context.width - wcswidth(line)) // 2)
             try:
                 context.stdscr.addstr(start_y + i, x, line, curses.color_pair(7))
             except curses.error:
                 pass
+
+        # Clock display
         current_time = time.strftime("%H:%M:%S")
         time_line = f" {current_time} "
         try:
-            context.stdscr.addstr(start_y - 2, (context.width - len(time_line)) // 2, time_line, curses.color_pair(7))
+            context.stdscr.addstr(start_y - 2,
+                                  max(0, (width - wcswidth(time_line)) // 2),
+                                  time_line, curses.color_pair(7))
         except curses.error:
             pass
+
+        # Title
         menu_title = "menu..."
         try:
             context.stdscr.addstr(start_y + len(logo_lines) + 1,
-                                  (context.width - len(menu_title)) // 2,
+                                  max(0, (width - wcswidth(menu_title)) // 2),
                                   menu_title, curses.color_pair(7) | curses.A_BOLD)
         except curses.error:
             pass
+
+        # Menu entries
         start_y_menu = start_y + len(logo_lines) + 3
         for idx, item in enumerate(menu_items):
             line = f" {item['icon']} {item['label']} [{item['shortcut'].upper()}] "
-            x = (context.width - len(line)) // 2
-            if idx == selected:
-                try:
+            x = max(0, (width - wcswidth(line)) // 2)
+            try:
+                if idx == selected:
                     context.stdscr.attron(curses.color_pair(7) | curses.A_BOLD)
-                    context.stdscr.addstr(start_y_menu + idx * 2, x, line)
+                    context.stdscr.addstr(start_y_menu + idx * 2, x, pad_line(line, width))
                     context.stdscr.attroff(curses.color_pair(7) | curses.A_BOLD)
-                except curses.error:
-                    pass
-            else:
-                try:
-                    context.stdscr.addstr(start_y_menu + idx * 2, x, line, curses.color_pair(7))
-                except curses.error:
-                    pass
+                else:
+                    context.stdscr.addstr(start_y_menu + idx * 2, x, pad_line(line, width), curses.color_pair(7))
+            except curses.error:
+                pass
+
         context.stdscr.refresh()
         key = context.stdscr.getch()
+
         if key in (curses.KEY_UP, ord('k')):
             selected = (selected - 1) % len(menu_items)
         elif key in (curses.KEY_DOWN, ord('j')):
             selected = (selected + 1) % len(menu_items)
-        elif key in (curses.KEY_ENTER, 10):
+        elif key in (curses.KEY_ENTER, 10, 13):
             return menu_items[selected]["shortcut"]
         elif key >= 0:
             c = chr(key).lower()
             for item in menu_items:
                 if c == item["shortcut"]:
                     return item["shortcut"]
+
 
 def show_theme_menu(context):
     """
@@ -1030,7 +1063,13 @@ def display(context):
         context.stdscr.move(cursor_y, cursor_x)
     except curses.error:
         pass
+
+    # --- LAST thing drawn: let plugins add their UI -----------------
+    context.plugin_manager.render(context)      # ← MUST be here
+    # ----------------------------------------------------------------
+
     context.stdscr.refresh()
+
 
 def prompt_input(context, prompt: str) -> str:
     """

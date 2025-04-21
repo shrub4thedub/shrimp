@@ -1,0 +1,24 @@
+def qkcomment
+    title       Toggle '# ' comment on current line with cc
+    description First **c** arms; second **c** within 1 s comments / uncomments.
+
+    bind c mode normal
+        import time
+        now = time.time()
+        pending = ctx.__dict__.get("_tc_pending", 0)
+
+        if now - pending < 1.0:
+            ctx.__dict__.pop("_tc_pending", None)
+            buf = ctx.current_buffer
+            i   = buf.cursor_line
+            line = buf.lines[i]
+            if line.lstrip().startswith("#"):
+                idx = line.index("#")
+                buf.lines[i] = line[:idx] + line[idx+1:].lstrip(" ")
+            else:
+                buf.lines[i] = "# " + line
+            buf.modified = True
+            log("cc: comment")
+        else:
+            ctx.__dict__["_tc_pending"] = now
+            status("comment: press c again…")

@@ -121,16 +121,17 @@ class Buffer:
         return "\n".join(self.lines[start:end])
 
     def paste_lines(self, text: str):
-        """Paste given text (possibly multiple lines) below the current line."""
         if not text:
             return
         clip_lines = text.splitlines()
         insertion_index = self.cursor_line + 1
-        for i, line in enumerate(clip_lines):
-            self.lines.insert(insertion_index + i, line)
+        # Insert all the new lines at once for efficiency
+        self.lines[insertion_index:insertion_index] = clip_lines
         self.modified = True
+        # Move cursor to the last inserted line, at start of line
         self.cursor_line = insertion_index + len(clip_lines) - 1
         self.cursor_col = 0
+
 
     def delete_word(self):
         """Delete the word at or after the cursor position on the current line."""

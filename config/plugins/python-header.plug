@@ -1,0 +1,15 @@
+def python-header
+    title       Insert Python shebang 
+    description Command‑mode **pyhdr** adds shebang & encoding at top of buffer.
+
+    bind pyhdr mode command
+        hdr = ["#!/usr/bin/env python3",
+               "# -*- coding: utf-8 -*-",
+               ""]
+        buf = ctx.current_buffer
+        if buf.lines[:2] == hdr[:2]:
+            status("header already present"); return
+        buf.lines = hdr + buf.lines
+        buf.cursor_line += len(hdr)
+        buf.modified = True
+        log("python header inserted")

@@ -1,0 +1,24 @@
+def qksave
+    title       Quick save (write) --> ss
+    description First **s** arms; second **s** (within 1 s) saves the file.
+
+    bind s mode normal
+        import time
+        now = time.time()
+        pending = ctx.__dict__.get("_qs_pending", 0)
+
+        # if previous 'w' was <1 s ago ⇒ perform save
+        if now - pending < 1.0:
+            ctx.__dict__.pop("_qs_pending", None)
+            if ctx.current_buffer.filename is None:
+                name = ctx.ui.prompt_input(ctx, "filename:")
+                if not name: status("save cancelled"); return
+                ctx.current_buffer.filename = name
+            if ctx.current_buffer.save_to_file():
+                log("ss: quicksaved")
+            else:
+                status("save error")
+        else:
+            # arm the double‑press
+            ctx.__dict__["_qs_pending"] = now
+            status("quick‑save: press s again…")

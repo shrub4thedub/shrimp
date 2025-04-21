@@ -32,7 +32,7 @@ def process_command(context, command: str):
             selection = context.ui.show_buffer_menu(context)
             if selection is not None:
                 context.switch_to_buffer(selection)
-                context.log_command("tb: buffer menu")
+                context.log_command("󰘍tb  buffer menu")
         return
 
     if cmd_lower in ("m", "menu"):
@@ -44,7 +44,7 @@ def process_command(context, command: str):
                 new_buf = buffer.Buffer(new_fn, [""])
                 new_buf.modified = False
                 context.add_buffer(new_buf)
-                context.log_command("n: new file")
+                context.log_command("new file")
         elif choice == "t":
             context.ui.show_full_filetree(context)
         elif choice == "d":
@@ -67,7 +67,7 @@ def process_command(context, command: str):
                     context.add_buffer(new_buffer)
                     context.mode = "normal"
                     context.sidebar_visible = True
-                    context.log_command("dir: changed directory to " + os.getcwd())
+                    context.log_command("󰘍dir  cd to " + os.getcwd())
                 except Exception as e:
                     context.status_message = "error changing directory: " + str(e)
                     context.log_command("dir error: " + str(e))
@@ -76,6 +76,7 @@ def process_command(context, command: str):
         elif choice == "f":
             query = context.ui.prompt_input(context, "enter search query:")
             if query:
+                context.log_command("searching for" ,query)
                 context.start_search(query)
             else:
                 context.status_message = "search string empty."
@@ -94,7 +95,7 @@ def process_command(context, command: str):
         success = context.current_buffer.save_to_file()
         if success:
             num_bytes = sum(len(line) for line in context.current_buffer.lines) + (len(context.current_buffer.lines) - 1)
-            context.log_command(f"w: write ({num_bytes} bytes)")
+            context.log_command(f"󰘍w  {num_bytes} bytes written")
         else:
             context.status_message = f"error saving file: {context.current_buffer.filename}"
         return
@@ -104,7 +105,7 @@ def process_command(context, command: str):
         if context.current_buffer.filename is None:
             name = context.ui.prompt_input(context, "enter filename to save:")
             if not name:
-                context.log_command("wq: quit without filename")
+                context.log_command("󰘍wq  quit without filename")
                 context.graceful_exit()
                 return
             context.current_buffer.filename = name
@@ -113,7 +114,7 @@ def process_command(context, command: str):
         return
 
     if cmd_lower in ("quit", "q"):
-        context.log_command("q: quit")
+        context.log_command("󰘍q  quit")
         context.graceful_exit()
         return
 
@@ -125,12 +126,12 @@ def process_command(context, command: str):
             if context.mode == "filetree":
                 context.mode = "normal"
             context.sidebar_help_mode = False
-            context.log_command("zen: on")
+            context.log_command("󰘍zen  on")
             context.status_message = "zen mode on."
         else:
             context.zen_mode = False
             context.sidebar_visible = getattr(context, "sidebar_visible_before_zen", True)
-            context.log_command("zen: off")
+            context.log_command("zen mode off")
             context.status_message = "zen mode off."
         return
 
@@ -157,7 +158,7 @@ def process_command(context, command: str):
                 context.mode = "normal"
                 context.sidebar_visible = True
                 context.status_message = f"dir: changed directory to {path}"
-                context.log_command("dir: changed directory to " + path)
+                context.log_command("󰘍dir  cd to " + path)
             except Exception as e:
                 context.status_message = "error changing directory: " + str(e)
                 context.log_command("dir error: " + str(e))
@@ -187,8 +188,8 @@ def process_command(context, command: str):
         new_buf = buffer.Buffer(new_name, [""])
         new_buf.modified = False
         context.add_buffer(new_buf)
-        context.status_message = f"fn: created new file {new_name}"
-        context.log_command(f"fn: file created: {new_name}")
+        context.status_message = f"fn created new file {new_name}"
+        context.log_command(f"󰘍fn  new file {new_name}")
         return
 
     if cmd_lower.startswith("fr "):
@@ -205,10 +206,10 @@ def process_command(context, command: str):
             context.current_buffer.filename = new_name
             context.current_buffer.save_to_file()
             context.status_message = f"fr: renamed file to {new_name}"
-            context.log_command(f"fr: file renamed to {new_name}")
+            context.log_command(f"󰘍fr  file renamed to {new_name}")
         except Exception as e:
             context.status_message = f"error renaming file: {e}"
-            context.log_command(f"fr: error renaming file: {e}")
+            context.log_command(f"󰘍fr  error renaming file: {e}")
         return
 
     if cmd_lower.startswith("fd"):
@@ -225,10 +226,10 @@ def process_command(context, command: str):
             context.current_buffer.scroll = 0
             context.current_buffer.modified = False
             context.status_message = f"fd: deleted file {current_filename}"
-            context.log_command(f"fd: file deleted {current_filename}")
+            context.log_command(f"󰘍fd  deleted file {current_filename}")
         except Exception as e:
             context.status_message = f"error deleting file: {e}"
-            context.log_command(f"fd: error deleting file: {e}")
+            context.log_command(f"󰘍fd  error deleting file: {e}")
         return
 
     # Interpret multiple tokens as quick commands
@@ -239,7 +240,7 @@ def process_command(context, command: str):
             context.current_buffer.cursor_line = 0
             context.current_buffer.cursor_col = 0
             context.current_buffer.modified = True
-            context.log_command("c: clear")
+            context.log_command("󰘍c  clear")
             context.status_message = "file cleared."
         elif token == 'w':
             if context.current_buffer.filename is None:
@@ -249,14 +250,14 @@ def process_command(context, command: str):
                 context.current_buffer.filename = name
             context.current_buffer.save_to_file()
             num_bytes = sum(len(line) for line in context.current_buffer.lines) + (len(context.current_buffer.lines) - 1)
-            context.log_command(f"w: write ({num_bytes} bytes)")
+            context.log_command(f"󰘍w  write ({num_bytes} bytes)")
         elif token == 's':
             if context.zen_mode:
                 context.status_message = "sidebar disabled in zen mode."
             else:
                 context.sidebar_visible = not context.sidebar_visible
                 mode_str = "on" if context.sidebar_visible else "off"
-                context.log_command(f"s: sidebar {mode_str}")
+                context.log_command(f"󰘍s  sidebar {mode_str}")
                 context.status_message = f"sidebar {mode_str}."
         elif token == 'h':
             if context.zen_mode:
@@ -264,7 +265,7 @@ def process_command(context, command: str):
             else:
                 context.sidebar_help_mode = True
                 context.help_mode_expiry = time.time() + 3
-                context.log_command("h: help on")
+                context.log_command("󰘍h  help on")
                 context.status_message = "help on."
         elif token == 't':
             if context.zen_mode:
@@ -283,14 +284,14 @@ def process_command(context, command: str):
                     context.flat_file_list = filetree.flatten_tree(context.file_tree_root)
                     context.filetree_selection_index = 0
                     context.filetree_scroll_offset = 0
-                    context.log_command("t: file tree")
+                    context.log_command("󰘍t  file tree")
                     context.status_message = "file tree activated."
                 else:
                     context.mode = "normal"
-                    context.log_command("t: normal")
+                    context.log_command("back to normal")
                     context.status_message = "normal mode."
         elif token == 'q':
-            context.log_command("q: quit")
+            context.log_command("󰘍q  quit")
             context.graceful_exit()
             return
         elif token == 'z':
@@ -309,4 +310,3 @@ def process_command(context, command: str):
                 context.current_buffer_index = (context.current_buffer_index + 1) % len(context.buffers)
                 context.current_buffer = context.buffers[context.current_buffer_index]
                 context.status_message = f"goto[{context.current_buffer.cursor_line+1}]"
-

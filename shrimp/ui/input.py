@@ -44,24 +44,24 @@ def handle_normal_mode(context, key: int):
         ch = chr(key) if 32 <= key < 127 else None
         if ch == 'j':
             context.current_buffer.jump_word()
-            context.log_command("wj: jump word")
+            context.log_command("wj  jump word")
         elif ch == 'h':
             context.current_buffer.jump_back_word()
-            context.log_command("wh: jump back")
+            context.log_command("wh  jump back")
         elif ch == 'd':
             context.current_buffer.delete_word()
-            context.log_command("wd: delete word")
+            context.log_command("wd  delete word")
         elif ch == 'y':
             word = context.current_buffer.copy_word_inline()
             context.word_clipboard = word
-            context.log_command("wy: copy word")
+            context.log_command("wy  copy word")
         elif ch == 'p':
             context.pending_word_change = True
             context.current_buffer.delete_word()
             context.mode = "insert"
-            context.log_command("wp: word change")
+            context.log_command("wp  word change")
         else:
-            context.log_command(f"w{ch or '?'}: unknown")
+            context.log_command(f"w{ch or '?'}  unknown")
         context.word_mode = False
         return
 
@@ -114,7 +114,7 @@ def handle_normal_mode(context, key: int):
         if context.current_buffer.mark_line is None:
             context.current_buffer.mark_line = context.current_buffer.cursor_line
             context.status_message = f"mark set on line {context.current_buffer.cursor_line + 1}"
-            context.log_command("m: mark set")
+            context.log_command = f"m  mark set line {context.current_buffer.cursor_line + 1}"
         else:
             target = context.current_buffer.mark_line
             if target < len(context.current_buffer.lines):
@@ -125,38 +125,38 @@ def handle_normal_mode(context, key: int):
                 )
             context.current_buffer.mark_line = None
             context.status_message = f"jumped to line {target + 1}"
-            context.log_command("m: jump to mark")
+            context.log_command("m  jump to mark")
         return
 
     if key == ord('d'):
         context.current_buffer.delete_line()
-        context.log_command("d: delete line")
+        context.log_command("d  delete line")
         return
 
     if key == ord('i'):
         context.mode = "insert"
-        context.log_command("i: insert")
+        context.log_command("i  insert")
         return
 
     if key == ord('o'):
         context.mode = "command"
         context.command_buffer = ""
-        context.log_command("o: command")
+        context.log_command("o  command")
         return
 
     if key == ord('D'):
         context.current_buffer.delete_paragraph()
-        context.log_command("d: delete paragraph")
+        context.log_command("d  delete paragraph")
         return
 
     if key == ord('y'):
         context.clipboard = context.current_buffer.copy_line()
-        context.log_command("y: copy line")
+        context.log_command("y  copy line")
         return
 
     if key == ord('Y'):
         context.clipboard = context.current_buffer.copy_paragraph()
-        context.log_command("y: copy paragraph")
+        context.log_command("Y  copy paragraph")
         return
 
     if key == ord('u'):
@@ -170,12 +170,12 @@ def handle_normal_mode(context, key: int):
             context.current_buffer.cursor_col += len(context.word_clipboard)
             context.word_clipboard = ""
             context.current_buffer.modified = True
-            context.log_command("u: paste word")
+            context.log_command("u  paste word")
         else:
             # Paste line(s) from normal clipboard
             if context.clipboard:
                 context.current_buffer.paste_lines(context.clipboard)
-                context.log_command("u: paste line")
+                context.log_command("u  paste line")
         return
 
     if key == ord('x'):
@@ -237,12 +237,12 @@ def handle_normal_mode(context, key: int):
     # Additional single-letter commands
     if key == ord('h'):
         context.current_buffer.cursor_col = 0              # start of line
-        context.log_command("h: startline")
+        context.log_command("h  start line")
         return
     if key == ord('j'):
         context.current_buffer.cursor_col = len(
             context.current_buffer.lines[context.current_buffer.cursor_line])  # end of line
-        context.log_command("j: endline")
+        context.log_command("j  jump line")
         return
     if key == ord('w'):
         context.word_mode = True                            # next key is word action
@@ -253,7 +253,7 @@ def handle_normal_mode(context, key: int):
         context.current_buffer.lines[context.current_buffer.cursor_line] = ""
         context.current_buffer.modified = True
         context.mode = "insert"
-        context.log_command("p: line change")
+        context.log_command("p  line change")
         return
 
 

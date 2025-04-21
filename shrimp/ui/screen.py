@@ -28,6 +28,7 @@ FILE_ICONS = {
     ".yml": "",
     ".json": "",
     ".lua": "",
+    ".plug": "󰐱",
 }
 DEFAULT_FILE_ICON = ""
 
@@ -397,7 +398,8 @@ def draw_sidebar(context, sidebar_width):
             f"{CMD_ARROW}dir <path>: cd",
             f"{CMD_ARROW}f: search",
             f"{CMD_ARROW}tb: tab menu",
-            f"{CMD_ARROW}th: theme menu",
+            f"{CMD_ARROW}th: theme switcher",
+            f"{CMD_ARROW}plug: plugin manager",
             f"{CMD_ARROW}x: next tab",
             f"{CMD_ARROW}z: prev tab",
         ]
@@ -1125,4 +1127,3 @@ def prompt_input(context, prompt: str) -> str:
         context.mode = old_mode
         context.command_buffer = saved_command_buffer
         curses.curs_set(0)
-

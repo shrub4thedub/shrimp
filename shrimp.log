@@ -3,7 +3,7 @@
 [2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 0/4 '
 [2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 0/4 '
 
-[2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 1/4 '
+
 [2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 1/4 '
 [2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 1/4 '
 [2025-04-16 11:06:25] curses.error in addstr at (44,69): ' loading... 2/4 '
@@ -2087,3 +2087,235 @@
 [2025-04-21 12:39:09] curses.error in addstr at (44,156): ' loading... 5/5 '
 [2025-04-21 12:39:09] curses.error in addstr at (44,156): ' loading... 5/5 '
 [2025-04-21 12:39:09] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:11] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:11] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 17:21:14] file opened: /home/shrub/shrimp/shrimp.log
+[2025-04-21 17:21:15] o: command
+[2025-04-21 17:21:16] h: help on
+[2025-04-21 17:21:26] o: command
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:27] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:27] t: file tree
+[2025-04-21 17:21:29] o: command
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:29] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:21:29] t: file tree
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:21:31] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 0/4 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 1/4 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 2/4 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 3/4 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-21 17:21:36] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-21 17:21:39] file opened: /home/shrub/shrimp/shrimp/ui/screen.py
+[2025-04-21 17:21:42] o: command
+[2025-04-21 17:22:11] y: copyline
+[2025-04-21 17:22:13] u: paste line
+[2025-04-21 17:22:16] i: insert
+[2025-04-21 17:22:53] o: command
+[2025-04-21 17:22:57] Editor exited.
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:23:00] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:23:00] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 17:23:02] file opened: /home/shrub/shrimp/shrimp.log
+[2025-04-21 17:23:03] o: command
+[2025-04-21 17:23:03] h: help on
+[2025-04-21 17:23:19] o: command
+[2025-04-21 17:23:23] o: command
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:23:24] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:23:24] t: file tree
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:23:25] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 0/4 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 1/4 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 2/4 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 3/4 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-21 17:23:27] curses.error in addstr at (44,156): ' loading... 4/4 '
+[2025-04-21 17:23:28] file opened: /home/shrub/shrimp/shrimp/ui/screen.py
+[2025-04-21 17:23:31] o: command
+[2025-04-21 17:23:54] o: command
+[2025-04-21 17:24:09] o: command
+[2025-04-21 17:24:11] theme changed to boring
+[2025-04-21 17:24:12] o: command
+[2025-04-21 17:24:16] theme changed to nord
+[2025-04-21 17:24:20] o: command
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:24:20] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:24:20] t: file tree
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 0/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 1/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 2/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 3/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 4/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 5/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 6/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 7/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 8/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,155): ' loading... 9/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,154): ' loading... 10/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,154): ' loading... 11/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:24:22] curses.error in addstr at (44,154): ' loading... 12/12 '
+[2025-04-21 17:24:25] file opened: /home/shrub/shrimp/shrimp/commands.py
+[2025-04-21 17:24:33] o: command
+[2025-04-21 17:24:35] Editor exited.
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:29:34] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:29:34] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 17:29:37] file opened: /home/shrub/shrimp/shrimp.log
+[2025-04-21 17:29:39] o: command
+[2025-04-21 17:29:59] o: command
+[2025-04-21 17:30:19] o: command
+[2025-04-21 17:30:22] 󰘍tb: buffer menu
+[2025-04-21 17:35:01] o: command
+[2025-04-21 17:35:04] wq: quit without filename
+[2025-04-21 17:35:04] Editor exited.
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:35:05] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:35:05] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)[2025-04-21 17:35:12] 󰘍w: (153889 bytes written)
+[2025-04-21 17:35:23] o: command
+[2025-04-21 17:35:28] o: command
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:35:28] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:35:28] 󰘍t: file tree
+[2025-04-21 17:35:32] o: command
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:36:54] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 17:36:54] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 17:36:56] curses.error in addstr at (44,156): ' loading... 0/3 '
+[2025-04-21 17:36:56] curses.error in addstr at (44,156): ' loading... 1/3 '
+[2025-04-21 17:36:56] curses.error in addstr at (44,156): ' loading... 2/3 '
+[2025-04-21 17:36:56] curses.error in addstr at (44,156): ' loading... 3/3 '
+[2025-04-21 17:36:56] curses.error in addstr at (44,156): ' loading... 3/3 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 0/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 1/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 2/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 3/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 4/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 5/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 6/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-21 17:36:58] curses.error in addstr at (44,156): ' loading... 7/7 '
+[2025-04-21 17:37:02] file opened: /home/shrub/shrimp/config/plugins/vim.plug
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 19:59:39] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 19:59:39] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)[2025-04-21 20:05:38] Editor exited.
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:05:40] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:05:40] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)[2025-04-21 20:07:47] Editor exited.
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:09:52] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:09:52] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)
+[2025-04-21 20:09:54] file opened: /home/shrub/shrimp/shrimp.log
+[2025-04-21 20:09:55] o command
+[2025-04-21 20:09:59] 󰘍fn: new file shrub
+[2025-04-21 20:10:01] o command
+[2025-04-21 20:10:03] 󰘍fd: deleted file shrub
+[2025-04-21 20:12:27] o command
+[2025-04-21 20:12:30] wq: quit without filename
+[2025-04-21 20:12:30] Editor exited.
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:12:30] Editor exited.
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 0/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 1/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 2/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 3/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 4/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:12:31] curses.error in addstr at (44,156): ' loading... 5/5 '
+[2025-04-21 20:12:31] [plugins] compile clipman:u: expected an indented block after 'for' statement on line 7 (<string>, line 7)[2025-04-21 20:21:51] Editor exited.

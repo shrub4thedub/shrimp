@@ -1,0 +1,48 @@
+def syntax_highlight
+title Syntax Highlighting
+description
+  Highlight Python keywords inline when editing .py files.
+  Toggle on/off via the Plugins menu (no extra keybind).
+
+# Register a draw‑hook that only runs when this plugin is enabled.
+import curses
+def _hl(ctx):
+    # find our plugin entry
+    pl = next((p for p in ctx.plugin_manager.plugins
+               if p.name == 'syntax_highlight'), None)
+    if not pl or not pl.enabled:
+        return
+
+    fn = ctx.get_current_filename() or ""
+    if not fn.endswith('.py'):
+        return
+
+    # sidebar offset
+    if ctx.sidebar_visible and ctx.width >= 80:
+        sbw = 30
+    elif ctx.sidebar_visible:
+        sbw = 20
+    else:
+        sbw = 0
+
+    vis_h = ctx.height - 1
+    # for each visible line...
+    for row in range(vis_h):
+        idx = ctx.current_buffer.scroll + row
+        if idx >= len(ctx.current_buffer.lines):
+            break
+        line = ctx.current_buffer.lines[idx]
+        col = sbw  # start at first text column
+
+        # very naive keyword scan
+        for token in line.split():
+            if token in ('def', 'class', 'import', 'from',
+                         'if', 'else', 'elif', 'return'):
+                try:
+                    ctx.stdscr.addstr(row, col, token,
+                                      curses.color_pair(5) | curses.A_BOLD)
+                except curses.error:
+                    pass
+            col += len(token) + 1
+
+api.add_draw_hook(_hl)

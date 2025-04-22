@@ -65,6 +65,8 @@ def _ensure_monkey_patch():
 
             # 6) draw sidebar (log mode)
             ui_screen.draw_sidebar(ctx, sidebar_w)
+            #6.5) allow plugins to render
+            ctx.plugin_manager.render(ctx)
 
             # 7) clear both pane regions
             for y in range(visible_height):

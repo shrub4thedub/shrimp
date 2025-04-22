@@ -1,0 +1,153 @@
+def notes
+title In‑file Notes
+description
+  Toggle a “note” (pencil icon) on the current line with `n` in normal mode.
+  Notes are stored in `~/.shrimp/config/shrimp.conf` and persist across sessions.
+  Use `:notes` or `:n` to open the full‑screen Notes Menu:
+    ↑/↓ to navigate, Enter to jump, Esc to cancel.
+
+bind n mode normal
+    import os, json
+    # config path
+    conf = os.path.expanduser("~/.shrimp/config/shrimp.conf")
+    os.makedirs(os.path.dirname(conf), exist_ok=True)
+    # load existing
+    try:
+        notes = json.load(open(conf, 'r', encoding='utf-8'))
+    except:
+        notes = {}
+    fn = ctx.get_current_filename() or ""
+    ln = ctx.current_buffer.cursor_line
+    lst = notes.get(fn, [])
+    if ln in lst:
+        lst.remove(ln)
+        status(f"Note removed: line {ln+1}")
+    else:
+        lst.append(ln)
+        status(f"Note added: line {ln+1}")
+    notes[fn] = lst
+    # save back
+    with open(conf, 'w', encoding='utf-8') as f:
+        json.dump(notes, f, indent=2)
+    # ensure draw‑hook is registered once
+    if not hasattr(api, '_notes_hook'):
+        def _draw_notes(ctx):
+            import os, json, curses
+            conf2 = os.path.expanduser("~/.shrimp/config/shrimp.conf")
+            try:
+                nts = json.load(open(conf2, 'r', encoding='utf-8'))
+            except:
+                return
+            fn2 = ctx.get_current_filename() or ""
+            # compute sidebar width
+            if ctx.sidebar_visible and ctx.width >= 80:
+                sb = 30
+            elif ctx.sidebar_visible:
+                sb = 20
+            else:
+                sb = 0
+            # for each noted line, draw pencil in first text column
+            for l in nts.get(fn2, []):
+                y = l - ctx.current_buffer.scroll
+                if 0 <= y < ctx.height - 1:
+                    try:
+                        # pencil icon at column sb
+                        ctx.stdscr.addstr(y, sb, "", curses.color_pair(1))
+                    except:
+                        pass
+        api.add_draw_hook(_draw_notes)
+        api._notes_hook = True
+
+bind notes mode command
+bind n mode command
+    import os, json, curses
+    conf = os.path.expanduser("~/.shrimp/config/shrimp.conf")
+    try:
+        notes = json.load(open(conf, 'r', encoding='utf-8'))
+    except:
+        notes = {}
+    # flatten entries
+    entries = []
+    for f, lines in notes.items():
+        for ln in sorted(lines):
+            entries.append((f, ln))
+    if not entries:
+        status("No notes.")
+        return
+    # enter full‑screen menu
+    curses.curs_set(0)
+    sel = 0
+    while True:
+        ctx.stdscr.clear()
+        h, w = ctx.height, ctx.width
+        title = " Notes Menu (↑/↓ to navigate • Enter to jump • Esc to cancel) "
+        # draw title centered
+        try:
+            ctx.stdscr.addstr(0,
+                              max(0, (w - len(title))//2),
+                              title,
+                              curses.color_pair(5) | curses.A_BOLD)
+        except:
+            pass
+        # list area width
+        list_w = max(20, w//4)
+        # draw entries
+        for i, (f, ln) in enumerate(entries[:h-2]):
+            label = f"{os.path.basename(f)}:{ln+1}"
+            attr = curses.color_pair(1)|curses.A_BOLD if i==sel else curses.color_pair(2)
+            try:
+                ctx.stdscr.addstr(2+i, 2, label[:list_w-4].ljust(list_w-4), attr)
+            except:
+                pass
+        # preview area
+        fsel, lnsel = entries[sel]
+        try:
+            lines = open(fsel, 'r', encoding='utf-8').read().splitlines()
+        except:
+            lines = []
+        start = max(0, lnsel-2)
+        for row in range(min(h-3, 5)):
+            idx = start + row
+            if idx < len(lines):
+                txt = lines[idx]
+                attr = curses.color_pair(10) if idx==lnsel else curses.color_pair(2)
+                try:
+                    ctx.stdscr.addstr(2+row,
+                                      list_w+2,
+                                      txt[:w-list_w-4],
+                                      attr)
+                except:
+                    pass
+        ctx.stdscr.refresh()
+        key = ctx.stdscr.getch()
+        if key == curses.KEY_UP:
+            sel = (sel-1) % len(entries)
+        elif key == curses.KEY_DOWN:
+            sel = (sel+1) % len(entries)
+        elif key in (10, curses.KEY_ENTER):
+            # jump to note
+            f2, ln2 = entries[sel]
+            idx = None
+            for i, buf in enumerate(ctx.buffers):
+                if buf.filename == f2:
+                    idx = i; break
+            if idx is None:
+                try:
+                    content = open(f2, 'r', encoding='utf-8').read().splitlines()
+                except:
+                    content = []
+                new = ctx.BufferClass(f2, content)
+                new.modified = False
+                ctx.add_buffer(new)
+                idx = ctx.current_buffer_index
+            ctx.switch_to_buffer(idx)
+            ctx.current_buffer.cursor_line = ln2
+            ctx.current_buffer.cursor_col  = 0
+            ctx.current_buffer.scroll      = max(0, ln2 - (h-2)//2)
+            curses.curs_set(1)
+            ctx.mode = "normal"
+            return
+        elif key == 27:
+            curses.curs_set(1)
+            ctx.mode = "normal"
+            return

@@ -1,0 +1,103 @@
+def scratchpad
+title Scratchpad
+description
+  Toggle a persistent scratchpad file in a vertical split with `x`.
+  The scratchpad is stored at `~/.shrimp/config/scratchpad.txt`.
+  Press `x` again to save & close it and return to your main buffer.
+
+bind x mode normal
+    import sys, os
+    from shrimp.plugins import PLUGIN_DIR
+    # ensure we can import shrimp_split
+    if PLUGIN_DIR not in sys.path:
+        sys.path.insert(0, PLUGIN_DIR)
+    import shrimp_split as ss
+    import shrimp.buffer as bufmod
+    import shrimp.ui.screen as ui_screen
+
+    # config path
+    cfg_dir = os.path.expanduser("~/.shrimp/config")
+    os.makedirs(cfg_dir, exist_ok=True)
+    scratch_path = os.path.join(cfg_dir, "scratchpad.txt")
+
+    # If scratchpad is already open → save & close
+    if getattr(ctx, 'scratch_open', False):
+        # save scratch buffer to file
+        sp_buf = ctx.current_buffer
+        try:
+            with open(scratch_path, 'w', encoding='utf-8') as f:
+                f.write("\n".join(sp_buf.lines))
+        except:
+            pass
+
+        # restore original display()
+        ui_screen.display = ui_screen._orig_display
+        delattr(ui_screen, '_orig_display')
+
+        # tear down split
+        ctx.split_active = False
+        ctx.panes = []
+
+        # restore main pane state
+        ps1 = ctx._scratch_ps1
+        ctx.switch_to_buffer(ps1['buf_index'])
+        ctx.current_buffer.cursor_line = ps1['cursor_line']
+        ctx.current_buffer.cursor_col  = ps1['cursor_col']
+        ctx.current_buffer.scroll      = ps1['scroll']
+        # optional scroll_x if used by split
+        try: ctx.current_buffer.scroll_x = ps1['scroll_x']
+        except: pass
+
+        ctx.scratch_open = False
+        status("Scratchpad saved & closed")
+        return
+
+    # Don’t nest splits
+    if getattr(ctx, 'split_active', False):
+        return status("Cannot open scratchpad inside another split.")
+
+    # --- Open scratchpad ---
+    # 1) Activate split
+    ctx.split_active = True
+    ctx.split_focus  = 1
+
+    # 2) Save main pane state
+    ps1 = {
+        'buf_index':   ctx.current_buffer_index,
+        'cursor_line': ctx.current_buffer.cursor_line,
+        'cursor_col':  ctx.current_buffer.cursor_col,
+        'scroll':      ctx.current_buffer.scroll,
+        'scroll_x':    getattr(ctx.current_buffer, 'scroll_x', 0)
+    }
+    ctx._scratch_ps1 = ps1
+    ctx.panes = [ type("PS", (), ps1)() ]
+
+    # 3) Load or initialize scratch file
+    if os.path.exists(scratch_path):
+        try:
+            lines = open(scratch_path, 'r', encoding='utf-8').read().splitlines()
+        except:
+            lines = [""]
+    else:
+        lines = [""]
+
+    # 4) Create & add scratch buffer
+    sb = bufmod.Buffer(scratch_path, lines)
+    sb.modified = False
+    ctx.add_buffer(sb)
+
+    # 5) Save scratch pane state
+    ps2 = {
+        'buf_index':   ctx.current_buffer_index,
+        'cursor_line': ctx.current_buffer.cursor_line,
+        'cursor_col':  ctx.current_buffer.cursor_col,
+        'scroll':      ctx.current_buffer.scroll,
+        'scroll_x':    getattr(ctx.current_buffer, 'scroll_x', 0)
+    }
+    ctx.panes.append( type("PS", (), ps2)() )
+
+    # 6) Monkey‑patch display for splits
+    ss._ensure_monkey_patch()
+
+    ctx.scratch_open = True
+    status("Scratchpad opened")
